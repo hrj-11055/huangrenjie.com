@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人作品集网站 — 设计原型参考</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+/* ============================================
+   个人作品集网站设计原型
+   此文件是视觉参考，供开发时复刻样式
+   ============================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0a0a0f;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+  color: #e8e8ec;
+  line-height: 1.5;
+}
+
+/* === 导航栏 === */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid rgba(255,255,255,0.06);
+}
+.nav-logo { font-size: 16px; font-weight: 500; letter-spacing: -0.5px; }
+.nav-logo span { color: #7c6df0; }
+.nav-links { display: flex; gap: 24px; font-size: 13px; color: #8888a0; }
+.nav-links a { color: #8888a0; text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: #e8e8ec; }
+
+/* === Hero 首屏 === */
+.hero {
+  padding: 80px 32px 60px;
+  position: relative;
+  overflow: hidden;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.hero-bg {
+  position: absolute; top: -40px; right: -60px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,109,240,0.12) 0%, transparent 70%);
+  animation: pulse 6s ease-in-out infinite;
+}
+.hero-bg2 {
+  position: absolute; bottom: -20px; left: -40px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(93,202,165,0.08) 0%, transparent 70%);
+  animation: pulse 8s ease-in-out infinite 2s;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #7c6df0;
+  border: 0.5px solid rgba(124,109,240,0.3);
+  padding: 4px 12px; border-radius: 20px; margin-bottom: 20px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero h1 {
+  font-size: 34px; font-weight: 500; letter-spacing: -0.5px;
+  line-height: 1.3; margin-bottom: 12px;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+.hero h1 span { color: #7c6df0; }
+.hero-motto {
+  font-size: 13px; color: #5c5c72; letter-spacing: 2px;
+  margin-bottom: 16px; font-style: italic;
+  animation: fadeUp 0.6s ease 0.15s both;
+}
+.hero-sub {
+  font-size: 15px; color: #8888a0; line-height: 1.7;
+  max-width: 500px; margin-bottom: 28px;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-btns {
+  display: flex; gap: 12px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+.btn-primary {
+  padding: 10px 24px; background: #7c6df0; color: #fff;
+  border: none; border-radius: 8px; font-size: 13px;
+  font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.btn-primary:hover { background: #6b5ce0; transform: translateY(-1px); }
+.btn-ghost {
+  padding: 10px 24px; background: transparent; color: #e8e8ec;
+  border: 0.5px solid rgba(255,255,255,0.15); border-radius: 8px;
+  font-size: 13px; cursor: pointer; transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+.stats {
+  display: flex; gap: 24px; margin-top: 40px;
+  animation: fadeUp 0.6s ease 0.4s both;
+}
+.stat { text-align: left; }
+.stat-num { font-size: 28px; font-weight: 500; color: #e8e8ec; }
+.stat-num span { color: #7c6df0; }
+.stat-label { font-size: 11px; color: #5c5c72; margin-top: 2px; letter-spacing: 0.5px; }
+
+/* === 通用板块 === */
+.section { padding: 48px 32px; max-width: 960px; margin: 0 auto; }
+.section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.section-title { font-size: 18px; font-weight: 500; letter-spacing: -0.3px; }
+.section-title i { color: #7c6df0; margin-right: 8px; font-size: 20px; vertical-align: -2px; }
+.section-link { font-size: 12px; color: #7c6df0; text-decoration: none; display: flex; align-items: center; gap: 4px; }
+.divider { height: 0.5px; background: rgba(255,255,255,0.06); margin: 0 32px; max-width: 896px; margin-left: auto; margin-right: auto; }
+
+/* === 项目卡片 === */
+.projects { display: flex; flex-direction: column; gap: 16px; }
+.project-card {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px; overflow: hidden;
+  cursor: pointer; transition: all 0.3s ease;
+}
+.project-card:hover {
+  border-color: rgba(124,109,240,0.3);
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+.project-card:hover .project-arrow { opacity: 1; transform: translateX(0); }
+.project-body { padding: 20px; }
+.project-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.project-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.project-icon.p1 { background: rgba(124,109,240,0.15); color: #7c6df0; }
+.project-icon.p2 { background: rgba(93,202,165,0.15); color: #5dcaa5; }
+.project-icon.p3 { background: rgba(240,153,123,0.15); color: #f0997b; }
+.project-arrow { opacity: 0; transform: translateX(-8px); transition: all 0.3s; color: #7c6df0; font-size: 18px; }
+.project-name { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+.project-url { font-size: 11px; color: #5c5c72; margin-bottom: 8px; }
+.project-desc { font-size: 13px; color: #8888a0; line-height: 1.6; margin-bottom: 14px; }
+.project-features { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.feature { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #a0a0b4; }
+.feature i { color: #7c6df0; font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+.feature.f2 i { color: #5dcaa5; }
+.feature.f3 i { color: #f0997b; }
+.project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-size: 11px; padding: 3px 10px; border-radius: 20px;
+  background: rgba(255,255,255,0.05); color: #8888a0;
+  border: 0.5px solid rgba(255,255,255,0.08);
+}
+.tag.live { color: #5dcaa5; border-color: rgba(93,202,165,0.3); background: rgba(93,202,165,0.08); }
+.tag.soon { color: #f0997b; border-color: rgba(240,153,123,0.3); background: rgba(240,153,123,0.08); }
+.tag.wx { color: #85b7eb; border-color: rgba(133,183,235,0.3); background: rgba(133,183,235,0.08); }
+
+/* === 博客卡片 === */
+.blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.blog-card {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 16px;
+  cursor: pointer; transition: all 0.3s;
+}
+.blog-card:hover { border-color: rgba(124,109,240,0.3); background: rgba(255,255,255,0.05); }
+.blog-date { font-size: 11px; color: #5c5c72; margin-bottom: 8px; }
+.blog-series {
+  font-size: 10px; color: #e0c46c;
+  background: rgba(224,196,108,0.1);
+  padding: 2px 8px; border-radius: 10px;
+  display: inline-block; margin-bottom: 6px;
+}
+.blog-title { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; }
+.blog-excerpt { font-size: 12px; color: #8888a0; line-height: 1.5; }
+
+/* === 关于我 === */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.about-card {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 20px;
+}
+.about-card-title { font-size: 13px; color: #5c5c72; margin-bottom: 12px; letter-spacing: 0.5px; }
+
+/* 技术栈标签 */
+.tech-group { margin-bottom: 14px; }
+.tech-group:last-child { margin-bottom: 0; }
+.tech-group-label { font-size: 10px; color: #5c5c72; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.tech-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tech-tag {
+  font-size: 11px; padding: 5px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  color: #c0c0d0; transition: all 0.2s;
+  display: flex; align-items: center; gap: 5px;
+}
+.tech-tag:hover { border-color: rgba(124,109,240,0.3); background: rgba(124,109,240,0.06); color: #e8e8ec; }
+.tech-tag i { font-size: 13px; }
+.tech-tag.accent1 { border-color: rgba(124,109,240,0.2); color: #b0a4f4; }
+.tech-tag.accent1:hover { border-color: rgba(124,109,240,0.4); background: rgba(124,109,240,0.1); }
+.tech-tag.accent2 { border-color: rgba(93,202,165,0.2); color: #8fd4bb; }
+.tech-tag.accent2:hover { border-color: rgba(93,202,165,0.4); background: rgba(93,202,165,0.1); }
+.tech-tag.accent3 { border-color: rgba(240,153,123,0.2); color: #f0b49b; }
+.tech-tag.accent3:hover { border-color: rgba(240,153,123,0.4); background: rgba(240,153,123,0.1); }
+
+/* 兴趣爱好 */
+.hobby-section { margin-bottom: 16px; }
+.hobby-label { font-size: 10px; color: #5c5c72; margin-bottom: 6px; }
+.interest-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.int-tag {
+  font-size: 12px; padding: 6px 14px; border-radius: 20px;
+  border: 0.5px solid rgba(255,255,255,0.1); color: #8888a0;
+  transition: all 0.2s;
+}
+.int-tag:hover { color: #e8e8ec; border-color: rgba(124,109,240,0.4); background: rgba(124,109,240,0.08); }
+.int-tag.wish { border-style: dashed; color: #5c5c72; }
+.int-tag.wish:hover { color: #f0997b; border-color: rgba(240,153,123,0.4); background: rgba(240,153,123,0.08); }
+
+/* 书单 */
+.book-list { display: flex; flex-direction: column; gap: 8px; }
+.book-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; background: rgba(255,255,255,0.02);
+  border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.04);
+  transition: all 0.2s;
+}
+.book-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+.book-cover {
+  width: 28px; height: 38px; border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.book-info { flex: 1; }
+.book-title { font-size: 12px; font-weight: 500; color: #e8e8ec; }
+.book-author { font-size: 11px; color: #5c5c72; }
+.book-source { font-size: 10px; color: #5c5c72; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+
+/* 工作经历 */
+.exp-item { display: flex; gap: 12px; margin-bottom: 16px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-dot { width: 8px; height: 8px; border-radius: 50%; background: #7c6df0; margin-top: 6px; flex-shrink: 0; }
+.exp-role { font-size: 13px; font-weight: 500; }
+.exp-company { font-size: 12px; color: #8888a0; }
+.exp-time { font-size: 11px; color: #5c5c72; }
+
+/* === CTA & Footer === */
+.cta-section { padding: 40px 32px; text-align: center; }
+.cta-section h3 { font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+.cta-section p { font-size: 13px; color: #8888a0; margin-bottom: 20px; }
+.cta-links { display: flex; justify-content: center; gap: 12px; }
+.cta-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  border: 0.5px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: #8888a0; font-size: 18px; transition: all 0.2s; cursor: pointer;
+}
+.cta-icon:hover { color: #7c6df0; border-color: rgba(124,109,240,0.4); background: rgba(124,109,240,0.08); }
+.cta-labels { display: flex; justify-content: center; gap: 12px; margin-top: 8px; }
+.cta-lbl { width: 40px; font-size: 10px; color: #5c5c72; text-align: center; }
+.footer {
+  padding: 24px 32px; text-align: center; font-size: 12px; color: #3c3c50;
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo"><span>&lt;</span>YourName<span>/&gt;</span></div>
+  <div class="nav-links">
+    <a href="#">项目</a>
+    <a href="#">沉思录</a>
+    <a href="#">关于</a>
+    <a href="#">联系</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg2"></div>
+  <div class="hero-tag"><i class="ti ti-sparkles"></i> AI Builder</div>
+  <h1>AI 全栈开发者，<br>用产品<span>解决真实问题</span></h1>
+  <div class="hero-motto">「 知行合一，功不唐捐 」</div>
+  <p class="hero-sub">我专注于用 AI 构建有价值的产品。从需求洞察到上线交付，不只是写代码——而是把想法变成别人真正用得上的东西。</p>
+  <div class="hero-btns">
+    <button class="btn-primary"><i class="ti ti-arrow-down" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 查看项目</button>
+    <button class="btn-ghost"><i class="ti ti-file-text" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 下载简历</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">3<span>+</span></div><div class="stat-label">已上线项目</div></div>
+    <div class="stat"><div class="stat-num">1<span>年</span></div><div class="stat-label">AI 开发经验</div></div>
+    <div class="stat"><div class="stat-num">20<span>+</span></div><div class="stat-label">原创文章</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-head">
+    <div class="section-title"><i class="ti ti-rocket"></i> 精选项目</div>
+    <a href="#" class="section-link">查看全部 <i class="ti ti-arrow-right" style="font-size:14px"></i></a>
+  </div>
+  <div class="projects">
+    <div class="project-card">
+      <div class="project-body">
+        <div class="project-top">
+          <div class="project-icon p1"><i class="ti ti-world"></i></div>
+          <i class="ti ti-arrow-up-right project-arrow"></i>
+        </div>
+        <div class="project-name">AIcoming — AI 一站式平台</div>
+        <div class="project-url">aicoming.cn</div>
+        <div class="project-desc">一个面向 AI 从业者和爱好者的综合平台，聚合全球 AI 资讯、工具和资源。</div>
+        <div class="project-features">
+          <div class="feature"><i class="ti ti-rss"></i> 国内外 AI 资讯聚合，多信息源实时抓取</div>
+          <div class="feature"><i class="ti ti-message-chatbot"></i> 专业提示词生成器，高效驱动 AI 输出</div>
+          <div class="feature"><i class="ti ti-apps"></i> 国内外优质 AI 工具导航与分类聚合</div>
+          <div class="feature"><i class="ti ti-puzzle"></i> AI Agent Skill 合集，可复用的能力模块</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">AI</span><span class="tag">全栈</span><span class="tag">数据聚合</span><span class="tag live">已上线</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-body">
+        <div class="project-top">
+          <div class="project-icon p2"><i class="ti ti-school"></i></div>
+          <i class="ti ti-arrow-up-right project-arrow"></i>
+        </div>
+        <div class="project-name">高考志愿智能咨询系统</div>
+        <div class="project-url">微信小程序</div>
+        <div class="project-desc">基于大学和专业的深度数据研究，通过智能测评为考生生成个性化的报考建议报告。</div>
+        <div class="project-features">
+          <div class="feature f2"><i class="ti ti-clipboard-check"></i> 智能测评题目，精准定位考生兴趣与优势</div>
+          <div class="feature f2"><i class="ti ti-report-analytics"></i> AI 驱动的专业报考建议报告生成</div>
+          <div class="feature f2"><i class="ti ti-database"></i> 覆盖全国院校和专业的深度数据研究</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">AI</span><span class="tag">教育</span><span class="tag">数据分析</span><span class="tag wx">微信小程序</span><span class="tag live">已上线</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-body">
+        <div class="project-top">
+          <div class="project-icon p3"><i class="ti ti-transform"></i></div>
+          <i class="ti ti-arrow-up-right project-arrow"></i>
+        </div>
+        <div class="project-name">简历转网站服务</div>
+        <div class="project-desc">把任何人的简历一键转换成专业的个人展示网站。先以自己的简历为样板验证流程，再构建可复用的基础框架与模板体系。</div>
+        <div class="project-features">
+          <div class="feature f3"><i class="ti ti-file-import"></i> 简历内容 AI 智能解析与结构化重组</div>
+          <div class="feature f3"><i class="ti ti-palette"></i> 可定制化模板，适配不同行业和风格</div>
+          <div class="feature f3"><i class="ti ti-rocket"></i> 一键部署上线，零门槛拥有个人网站</div>
+        </div>
+        <div class="project-tags">
+          <span class="tag">Next.js</span><span class="tag">Product</span><span class="tag">SaaS</span><span class="tag">AI</span><span class="tag soon">开发中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-head">
+    <div class="section-title"><i class="ti ti-notebook"></i> 产品沉思录</div>
+    <a href="#" class="section-link">更多文章 <i class="ti ti-arrow-right" style="font-size:14px"></i></a>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card">
+      <div class="blog-date">2026 · 阅读 5 分钟</div>
+      <div class="blog-series">AI 知识复盘</div>
+      <div class="blog-title">Vibe Coding 为什么会改变独立开发者的游戏规则</div>
+      <div class="blog-excerpt">AI 辅助编程正在将开发范式从"写代码"转向"描述意图"，这对个人开发者意味着什么…</div>
+    </div>
+    <div class="blog-card">
+      <div class="blog-date">2026 · 阅读 3 分钟</div>
+      <div class="blog-series">产品感悟</div>
+      <div class="blog-title">从高考志愿系统到简历网站：我的产品方法论</div>
+      <div class="blog-excerpt">两个完全不同赛道的项目，背后是同一套"先验证再规模化"的思路…</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <div class="section-head">
+    <div class="section-title"><i class="ti ti-user"></i> 关于我</div>
+  </div>
+  <div class="about-grid">
+    <div class="about-card" style="grid-column:1/-1">
+      <div class="about-card-title">技术栈</div>
+      <div class="tech-group">
+        <div class="tech-group-label">语言 & 框架</div>
+        <div class="tech-tags">
+          <span class="tech-tag accent1"><i class="ti ti-brand-python"></i> Python</span>
+          <span class="tech-tag accent1"><i class="ti ti-bolt"></i> FastAPI</span>
+          <span class="tech-tag accent1"><i class="ti ti-link"></i> LangChain</span>
+          <span class="tech-tag accent1"><i class="ti ti-sitemap"></i> Dify</span>
+        </div>
+      </div>
+      <div class="tech-group">
+        <div class="tech-group-label">AI 工具链</div>
+        <div class="tech-tags">
+          <span class="tech-tag accent2"><i class="ti ti-terminal-2"></i> Claude Code</span>
+          <span class="tech-tag accent2"><i class="ti ti-code"></i> Codex</span>
+          <span class="tech-tag accent2"><i class="ti ti-brand-google"></i> Gemini CLI</span>
+        </div>
+      </div>
+      <div class="tech-group">
+        <div class="tech-group-label">核心能力</div>
+        <div class="tech-tags">
+          <span class="tech-tag accent3"><i class="ti ti-message-chatbot"></i> Prompt Engineering</span>
+          <span class="tech-tag accent3"><i class="ti ti-brain"></i> NLP</span>
+          <span class="tech-tag accent3"><i class="ti ti-building"></i> AI 全栈开发</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-card">
+      <div class="about-card-title">工作经历</div>
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div>
+          <div class="exp-role">AI 全栈开发工程师</div>
+          <div class="exp-company">当前岗位</div>
+          <div class="exp-time">2025 — 至今</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-dot" style="background:#5dcaa5"></div>
+        <div>
+          <div class="exp-role">NLP 算法工程师</div>
+          <div class="exp-company">探迹科技有限公司</div>
+          <div class="exp-time">2023 — 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-card">
+      <div class="about-card-title">正在读的书</div>
+      <div class="book-list">
+        <div class="book-item">
+          <div class="book-cover" style="background:rgba(124,109,240,0.15);color:#7c6df0"><i class="ti ti-book"></i></div>
+          <div class="book-info"><div class="book-title">纳瓦尔宝典</div><div class="book-author">Eric Jorgenson</div></div>
+        </div>
+        <div class="book-item">
+          <div class="book-cover" style="background:rgba(93,202,165,0.15);color:#5dcaa5"><i class="ti ti-book"></i></div>
+          <div class="book-info"><div class="book-title">思考，快与慢</div><div class="book-author">Daniel Kahneman</div></div>
+        </div>
+        <div class="book-item">
+          <div class="book-cover" style="background:rgba(240,153,123,0.15);color:#f0997b"><i class="ti ti-book"></i></div>
+          <div class="book-info"><div class="book-title">从零到一</div><div class="book-author">Peter Thiel</div></div>
+        </div>
+      </div>
+      <div class="book-source"><i class="ti ti-brand-wechat" style="font-size:12px"></i> 同步自微信读书</div>
+    </div>
+
+    <div class="about-card" style="grid-column:1/-1">
+      <div class="about-card-title">兴趣爱好</div>
+      <div class="hobby-section">
+        <div class="interest-tags">
+          <span class="int-tag"><i class="ti ti-book" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 阅读</span>
+          <span class="int-tag"><i class="ti ti-music" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 听音乐</span>
+          <span class="int-tag"><i class="ti ti-bike" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 骑车</span>
+          <span class="int-tag"><i class="ti ti-brain" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> AI 内容分享</span>
+        </div>
+      </div>
+      <div class="hobby-section" style="margin-bottom:0">
+        <div class="hobby-label">想做的事</div>
+        <div class="interest-tags">
+          <span class="int-tag wish"><i class="ti ti-karate" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 拳击</span>
+          <span class="int-tag wish"><i class="ti ti-microphone" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 随缘采访</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="cta-section">
+  <h3>一起做点有意思的事</h3>
+  <p>开放合作、自由职业和全职机会</p>
+  <div class="cta-links">
+    <div class="cta-icon"><i class="ti ti-mail"></i></div>
+    <div class="cta-icon"><i class="ti ti-brand-github"></i></div>
+    <div class="cta-icon"><i class="ti ti-brand-wechat"></i></div>
+  </div>
+  <div class="cta-labels">
+    <span class="cta-lbl">邮箱</span>
+    <span class="cta-lbl">GitHub</span>
+    <span class="cta-lbl">微信</span>
+  </div>
+</section>
+
+<footer class="footer">由 YourName 设计并开发 · 2026</footer>
+
+</body>
+</html>
