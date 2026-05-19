@@ -1,0 +1,50 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "index.html"
+      - "_worker.js"
+      - "animations.css"
+      - "terminal.js"
+      - "articles/**"
+      - "设计原型-参考.html"
+      - ".github/workflows/deploy-cloudflare-pages.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-pages-portfolio
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build deploy directory
+        run: |
+          rm -rf .site-dist
+          mkdir -p .site-dist
+          cp index.html animations.css terminal.js _worker.js .site-dist/
+          if [ -f "设计原型-参考.html" ]; then cp "设计原型-参考.html" .site-dist/; fi
+          if [ -d articles ]; then
+            mkdir -p .site-dist/articles
+            find articles -maxdepth 1 -type f ! -name 'README.md' -exec cp {} .site-dist/articles/ \;
+          fi
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy .site-dist --project-name=huangrenjie-com
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

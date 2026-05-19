@@ -1,0 +1,33 @@
+/* Global Animation Enhancements */
+
+/* 1. Pulse Glow Effect */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(124, 109, 240, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(124, 109, 240, 0.5); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Ensure hover interactions don't break the glow */
+.project-card:hover {
+  animation: none; /* Potentially disable or adjust on hover if needed */
+}
+
+/* 2. Update existing reveal animations to be smoother */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px); /* Increased offset for more visible entry */
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Consistent stagger */
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }

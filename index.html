@@ -4,30 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MarkHuang — AI Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="animations.css">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg-color: #0a0a0f;
+  --accent-purple: #7c6df0;
+  --system-green: #5dcaa5;
+  --warning-orange: #f0997b;
+  --text-main: #e8e8ec;
+  --text-dim: #8888a0;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.06);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
 body {
-  background: #0a0a0f;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
-  color: #e8e8ec;
+  background: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   overflow-x: hidden;
 }
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 2px;
+}
+
 html { scroll-behavior: smooth; }
+.mono { font-family: 'Courier New', monospace; }
+
+.icon-small { font-size: 14px; vertical-align: -1px; margin-right: 4px; }
+.hero-btn-icon { font-size: 14px; vertical-align: -1px; margin-right: 4px; }
+.grid-full { grid-column: 1 / -1; }
+.exp-dot-green { background: var(--system-green); }
+.book-cover-1 { background: rgba(124,109,240,0.15); color: var(--accent-purple); }
+.book-cover-2 { background: rgba(93,202,165,0.15); color: var(--system-green); }
+.book-cover-3 { background: rgba(240,153,123,0.15); color: var(--warning-orange); }
 
 /* === 导航栏 === */
 .nav {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 32px; position: sticky; top: 0; z-index: 100;
   background: rgba(10,10,15,0.85); backdrop-filter: blur(12px);
-  border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  border-bottom: 0.5px solid var(--card-border);
 }
 .nav-logo { font-size: 16px; font-weight: 500; letter-spacing: -0.5px; }
-.nav-logo span { color: #7c6df0; }
-.nav-links { display: flex; gap: 24px; font-size: 13px; color: #8888a0; }
-.nav-links a { color: #8888a0; text-decoration: none; transition: color 0.2s; }
-.nav-links a:hover { color: #e8e8ec; }
+.nav-logo span { color: var(--accent-purple); }
+.nav-links { display: flex; gap: 24px; font-size: 13px; color: var(--text-dim); }
+.nav-links a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text-main); }
 
 /* === 通用 === */
 .section { padding: 48px 32px; max-width: 960px; margin: 0 auto; }
@@ -47,8 +84,17 @@ html { scroll-behavior: smooth; }
 /* === Hero === */
 .hero {
   padding: 80px 32px 60px; position: relative; overflow: hidden;
-  max-width: 960px; margin: 0 auto;
+  max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
 }
+.hero-content { max-width: 500px; }
+.hero-monitor {
+  width: 20rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(0.5rem);
+  border: 0.0625rem solid rgba(255,255,255,0.1); border-radius: 0.75rem;
+  padding: 1rem; font-size: 0.75rem; color: var(--system-green);
+}
+.monitor-header { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-weight: 500; border-bottom: 0.0625rem solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; }
+.status-dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--system-green); display: inline-block; margin-right: 0.375rem; }
+#terminal-output { min-height: 7.5rem; word-break: break-all; }
 .hero-bg {
   position: absolute; top: -40px; right: -60px;
   width: 320px; height: 320px; border-radius: 50%;
@@ -121,7 +167,23 @@ html { scroll-behavior: smooth; }
   border: 0.5px solid rgba(255,255,255,0.06);
   border-radius: 12px; overflow: hidden;
   cursor: pointer; transition: all 0.3s ease;
+  position: relative;
 }
+.tribute-tag {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 10px; color: #a0a0b4; background: rgba(255,255,255,0.05);
+  padding: 4px 8px; border-radius: 4px; z-index: 10;
+  transition: all 0.3s;
+}
+.tribute-popover {
+  position: absolute; top: 40px; right: 12px; width: 200px;
+  background: #1a1a24; border: 1px solid #333;
+  padding: 10px; border-radius: 8px; font-size: 12px; color: #ccc;
+  opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 20;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.project-card:hover .tribute-tag { background: rgba(124,109,240,0.2); color: #fff; }
+.tribute-tag:hover + .tribute-popover { opacity: 1; visibility: visible; }
 .project-card:hover {
   border-color: rgba(124,109,240,0.3);
   background: rgba(255,255,255,0.05);
@@ -159,6 +221,7 @@ html { scroll-behavior: smooth; }
 /* === 博客卡片 === */
 .blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .blog-card {
+  display: block; color: inherit; text-decoration: none;
   background: rgba(255,255,255,0.03);
   border: 0.5px solid rgba(255,255,255,0.06);
   border-radius: 12px; padding: 16px;
@@ -175,67 +238,18 @@ html { scroll-behavior: smooth; }
 .blog-title { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; }
 .blog-excerpt { font-size: 12px; color: #8888a0; line-height: 1.5; }
 
-/* === 关于我 === */
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.about-card {
-  background: rgba(255,255,255,0.03);
-  border: 0.5px solid rgba(255,255,255,0.06);
-  border-radius: 12px; padding: 20px;
+/* === CORE SPECS (Tech Specs Style) === */
+.core-specs {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+  background: rgba(255, 255, 255, 0.02); padding: 32px; border: 0.5px solid rgba(255, 255, 255, 0.08); border-radius: 12px;
 }
-.about-card-title { font-size: 13px; color: #5c5c72; margin-bottom: 12px; letter-spacing: 0.5px; }
-.tech-group { margin-bottom: 14px; }
-.tech-group:last-child { margin-bottom: 0; }
-.tech-group-label { font-size: 10px; color: #5c5c72; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-.tech-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tech-tag {
-  font-size: 11px; padding: 5px 12px; border-radius: 8px;
-  background: rgba(255,255,255,0.04);
-  border: 0.5px solid rgba(255,255,255,0.08);
-  color: #c0c0d0; transition: all 0.2s;
-  display: flex; align-items: center; gap: 5px;
-}
-.tech-tag:hover { border-color: rgba(124,109,240,0.3); background: rgba(124,109,240,0.06); color: #e8e8ec; }
-.tech-tag i { font-size: 13px; }
-.tech-tag.accent1 { border-color: rgba(124,109,240,0.2); color: #b0a4f4; }
-.tech-tag.accent1:hover { border-color: rgba(124,109,240,0.4); background: rgba(124,109,240,0.1); }
-.tech-tag.accent2 { border-color: rgba(93,202,165,0.2); color: #8fd4bb; }
-.tech-tag.accent2:hover { border-color: rgba(93,202,165,0.4); background: rgba(93,202,165,0.1); }
-.tech-tag.accent3 { border-color: rgba(240,153,123,0.2); color: #f0b49b; }
-.tech-tag.accent3:hover { border-color: rgba(240,153,123,0.4); background: rgba(240,153,123,0.1); }
-.hobby-section { margin-bottom: 16px; }
-.hobby-label { font-size: 10px; color: #5c5c72; margin-bottom: 6px; }
-.interest-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.int-tag {
-  font-size: 12px; padding: 6px 14px; border-radius: 20px;
-  border: 0.5px solid rgba(255,255,255,0.1); color: #8888a0;
-  transition: all 0.2s;
-}
-.int-tag:hover { color: #e8e8ec; border-color: rgba(124,109,240,0.4); background: rgba(124,109,240,0.08); }
-.int-tag.wish { border-style: dashed; color: #5c5c72; }
-.int-tag.wish:hover { color: #f0997b; border-color: rgba(240,153,123,0.4); background: rgba(240,153,123,0.08); }
-.book-list { display: flex; flex-direction: column; gap: 8px; }
-.book-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; background: rgba(255,255,255,0.02);
-  border-radius: 8px; border: 0.5px solid rgba(255,255,255,0.04);
-  transition: all 0.2s;
-}
-.book-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
-.book-cover {
-  width: 28px; height: 38px; border-radius: 3px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; flex-shrink: 0;
-}
-.book-info { flex: 1; }
-.book-title { font-size: 12px; font-weight: 500; color: #e8e8ec; }
-.book-author { font-size: 11px; color: #5c5c72; }
-.book-source { font-size: 10px; color: #5c5c72; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
-.exp-item { display: flex; gap: 12px; margin-bottom: 16px; }
-.exp-item:last-child { margin-bottom: 0; }
-.exp-dot { width: 8px; height: 8px; border-radius: 50%; background: #7c6df0; margin-top: 6px; flex-shrink: 0; }
-.exp-role { font-size: 13px; font-weight: 500; }
-.exp-company { font-size: 12px; color: #8888a0; }
-.exp-time { font-size: 11px; color: #5c5c72; }
+.spec-category { display: flex; flex-direction: column; gap: 16px; }
+.spec-cat-label { font-size: 11px; color: #7c6df0; font-weight: 600; letter-spacing: 1px; }
+.spec-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.spec-list li { display: flex; justify-content: space-between; font-size: 12px; border-bottom: 0.5px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+.spec-list li span { color: #8888a0; font-family: monospace; }
+.spec-list li em { color: #e8e8ec; font-style: normal; font-weight: 500; text-align: right; }
+
 
 /* === CTA & Footer === */
 .cta-section { padding: 40px 32px; text-align: center; }
@@ -286,18 +300,24 @@ html { scroll-behavior: smooth; }
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-bg2"></div>
-  <div class="hero-tag"><i class="ti ti-sparkles"></i> AI Builder</div>
-  <h1>AI 全栈开发者，<br>用产品<em>解决真实问题</em></h1>
-  <div class="hero-motto">「 知行合一，功不唐捐 」</div>
-  <p class="hero-sub">我专注于用 AI 构建有价值的产品。从需求洞察到上线交付，不只是写代码——而是把想法变成别人真正用得上的东西。</p>
-  <div class="hero-btns">
-    <a href="#projects" class="btn-primary"><i class="ti ti-arrow-down" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 查看项目</a>
-    <button class="btn-ghost" onclick="downloadResume()"><i class="ti ti-file-text" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 下载简历</button>
+  <div class="hero-content">
+    <div class="hero-tag"><i class="ti ti-sparkles"></i> AI Builder</div>
+    <h1>AI 全栈开发者，<br>用产品<em>解决真实问题</em></h1>
+    <div class="hero-motto">「 知行合一，功不唐捐 」</div>
+    <p class="hero-sub">我专注于用 AI 构建有价值的产品。从需求洞察到上线交付，不只是写代码——而是把想法变成别人真正用得上的东西。</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary"><i class="ti ti-arrow-down hero-btn-icon"></i> 查看项目</a>
+      <button class="btn-ghost" onclick="downloadResume()"><i class="ti ti-file-text hero-btn-icon"></i> 下载简历</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" data-target="3">0<span>+</span></div><div class="stat-label">已上线项目</div></div>
+      <div class="stat"><div class="stat-num" data-target="1">0<span>年</span></div><div class="stat-label">AI 开发经验</div></div>
+      <div class="stat"><div class="stat-num" data-target="20">0<span>+</span></div><div class="stat-label">原创文章</div></div>
+    </div>
   </div>
-  <div class="stats">
-    <div class="stat"><div class="stat-num" data-target="3">0<span>+</span></div><div class="stat-label">已上线项目</div></div>
-    <div class="stat"><div class="stat-num" data-target="1">0<span>年</span></div><div class="stat-label">AI 开发经验</div></div>
-    <div class="stat"><div class="stat-num" data-target="20">0<span>+</span></div><div class="stat-label">原创文章</div></div>
+  <div class="hero-monitor mono">
+    <div class="monitor-header"><span><span class="status-dot"></span>STATUS: ONLINE</span><span>v1.0.4</span></div>
+    <div id="terminal-output"></div>
   </div>
 </section>
 
@@ -309,7 +329,9 @@ html { scroll-behavior: smooth; }
     <a href="#" class="section-link">查看全部 <i class="ti ti-arrow-right" style="font-size:14px"></i></a>
   </div>
   <div class="projects">
-    <div class="project-card reveal">
+    <div class="project-card reveal pulse-glow">
+      <div class="tribute-tag">💡 灵感来自：Claude 协作</div>
+      <div class="tribute-popover">受 Claude AI 协作启发，将产品思维转化为代码逻辑。</div>
       <div class="project-body">
         <div class="project-top">
           <div class="project-icon p1"><i class="ti ti-world"></i></div>
@@ -329,7 +351,9 @@ html { scroll-behavior: smooth; }
         </div>
       </div>
     </div>
-    <div class="project-card reveal reveal-delay-1">
+    <div class="project-card reveal reveal-delay-1 pulse-glow">
+      <div class="tribute-tag">💡 灵感来自：教育调研</div>
+      <div class="tribute-popover">基于真实高考志愿填报难点，结合 AI 测评算法构建。</div>
       <div class="project-body">
         <div class="project-top">
           <div class="project-icon p2"><i class="ti ti-school"></i></div>
@@ -348,7 +372,9 @@ html { scroll-behavior: smooth; }
         </div>
       </div>
     </div>
-    <div class="project-card reveal reveal-delay-2">
+    <div class="project-card reveal reveal-delay-2 pulse-glow">
+      <div class="tribute-tag">💡 灵感来自：个人作品集</div>
+      <div class="tribute-popover">为了让每个开发者都有自己的专属简历网站而诞生。</div>
       <div class="project-body">
         <div class="project-top">
           <div class="project-icon p3"><i class="ti ti-transform"></i></div>
@@ -377,18 +403,20 @@ html { scroll-behavior: smooth; }
     <a href="#" class="section-link">更多文章 <i class="ti ti-arrow-right" style="font-size:14px"></i></a>
   </div>
   <div class="blog-grid">
-    <div class="blog-card reveal">
+    <!-- BLOG:START -->
+    <a href="#blog" class="blog-card reveal">
       <div class="blog-date">2026 · 阅读 5 分钟</div>
       <div class="blog-series">AI 知识复盘</div>
       <div class="blog-title">Vibe Coding 为什么会改变独立开发者的游戏规则</div>
       <div class="blog-excerpt">AI 辅助编程正在将开发范式从"写代码"转向"描述意图"，这对个人开发者意味着什么…</div>
-    </div>
-    <div class="blog-card reveal reveal-delay-1">
+    </a>
+    <a href="#blog" class="blog-card reveal reveal-delay-1">
       <div class="blog-date">2026 · 阅读 3 分钟</div>
       <div class="blog-series">产品感悟</div>
       <div class="blog-title">从高考志愿系统到简历网站：我的产品方法论</div>
       <div class="blog-excerpt">两个完全不同赛道的项目，背后是同一套"先验证再规模化"的思路…</div>
-    </div>
+    </a>
+    <!-- BLOG:END -->
   </div>
 </section>
 
@@ -396,94 +424,32 @@ html { scroll-behavior: smooth; }
 
 <section class="section" id="about">
   <div class="section-head">
-    <div class="section-title"><i class="ti ti-user"></i> 关于我</div>
+    <div class="section-title"><i class="ti ti-cpu"></i> CORE SPECS</div>
   </div>
-  <div class="about-grid">
-    <div class="about-card reveal" style="grid-column:1/-1">
-      <div class="about-card-title">技术栈</div>
-      <div class="tech-group">
-        <div class="tech-group-label">语言 & 框架</div>
-        <div class="tech-tags">
-          <span class="tech-tag accent1"><i class="ti ti-brand-python"></i> Python</span>
-          <span class="tech-tag accent1"><i class="ti ti-bolt"></i> FastAPI</span>
-          <span class="tech-tag accent1"><i class="ti ti-link"></i> LangChain</span>
-          <span class="tech-tag accent1"><i class="ti ti-sitemap"></i> Dify</span>
-        </div>
-      </div>
-      <div class="tech-group">
-        <div class="tech-group-label">AI 工具链</div>
-        <div class="tech-tags">
-          <span class="tech-tag accent2"><i class="ti ti-terminal-2"></i> Claude Code</span>
-          <span class="tech-tag accent2"><i class="ti ti-code"></i> Codex</span>
-          <span class="tech-tag accent2"><i class="ti ti-brand-google"></i> Gemini CLI</span>
-        </div>
-      </div>
-      <div class="tech-group">
-        <div class="tech-group-label">核心能力</div>
-        <div class="tech-tags">
-          <span class="tech-tag accent3"><i class="ti ti-message-chatbot"></i> Prompt Engineering</span>
-          <span class="tech-tag accent3"><i class="ti ti-brain"></i> NLP</span>
-          <span class="tech-tag accent3"><i class="ti ti-building"></i> AI 全栈开发</span>
-        </div>
-      </div>
+  <div class="core-specs">
+    <div class="spec-category">
+      <div class="spec-cat-label">LOGIC & RUNTIME</div>
+      <ul class="spec-list">
+        <li><span>LANGUAGE</span><em>PYTHON, TS</em></li>
+        <li><span>RUNTIME</span><em>FASTAPI, UVICORN</em></li>
+        <li><span>LLM STACK</span><em>LANGCHAIN, DIFY, ANTHROPIC</em></li>
+      </ul>
     </div>
-
-    <div class="about-card reveal">
-      <div class="about-card-title">工作经历</div>
-      <div class="exp-item">
-        <div class="exp-dot"></div>
-        <div>
-          <div class="exp-role">AI 全栈开发工程师</div>
-          <div class="exp-company">当前岗位</div>
-          <div class="exp-time">2025 — 至今</div>
-        </div>
-      </div>
-      <div class="exp-item">
-        <div class="exp-dot" style="background:#5dcaa5"></div>
-        <div>
-          <div class="exp-role">NLP 算法工程师</div>
-          <div class="exp-company">探迹科技有限公司</div>
-          <div class="exp-time">2023 — 2025</div>
-        </div>
-      </div>
+    <div class="spec-category">
+      <div class="spec-cat-label">INTERFACE & BUILD</div>
+      <ul class="spec-list">
+        <li><span>DESIGN</span><em>CSS-NATIVE, TABLER</em></li>
+        <li><span>DEPLOY</span><em>CLOUDFLARE, VERCEL</em></li>
+        <li><span>AI TOOLING</span><em>CLAUDE CODE, GEMINI CLI</em></li>
+      </ul>
     </div>
-
-    <div class="about-card reveal reveal-delay-1">
-      <div class="about-card-title">正在读的书</div>
-      <div class="book-list">
-        <div class="book-item">
-          <div class="book-cover" style="background:rgba(124,109,240,0.15);color:#7c6df0"><i class="ti ti-book"></i></div>
-          <div class="book-info"><div class="book-title">纳瓦尔宝典</div><div class="book-author">Eric Jorgenson</div></div>
-        </div>
-        <div class="book-item">
-          <div class="book-cover" style="background:rgba(93,202,165,0.15);color:#5dcaa5"><i class="ti ti-book"></i></div>
-          <div class="book-info"><div class="book-title">思考，快与慢</div><div class="book-author">Daniel Kahneman</div></div>
-        </div>
-        <div class="book-item">
-          <div class="book-cover" style="background:rgba(240,153,123,0.15);color:#f0997b"><i class="ti ti-book"></i></div>
-          <div class="book-info"><div class="book-title">从零到一</div><div class="book-author">Peter Thiel</div></div>
-        </div>
-      </div>
-      <div class="book-source"><i class="ti ti-brand-wechat" style="font-size:12px"></i> 同步自微信读书</div>
-    </div>
-
-    <div class="about-card reveal" style="grid-column:1/-1">
-      <div class="about-card-title">兴趣爱好</div>
-      <div class="hobby-section">
-        <div class="interest-tags">
-          <span class="int-tag"><i class="ti ti-book" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 阅读</span>
-          <span class="int-tag"><i class="ti ti-music" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 听音乐</span>
-          <span class="int-tag"><i class="ti ti-bike" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 骑车</span>
-          <span class="int-tag"><i class="ti ti-brain" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> AI 内容分享</span>
-        </div>
-      </div>
-      <div class="hobby-section" style="margin-bottom:0">
-        <div class="hobby-label">想做的事</div>
-        <div class="interest-tags">
-          <span class="int-tag wish"><i class="ti ti-karate" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 拳击</span>
-          <span class="int-tag wish"><i class="ti ti-microphone" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i> 随缘采访</span>
-        </div>
-      </div>
+    <div class="spec-category">
+      <div class="spec-cat-label">CORE CAPABILITIES</div>
+      <ul class="spec-list">
+        <li><span>PRODUCT</span><em>REQUIREMENT ANALYSIS</em></li>
+        <li><span>NLP</span><em>STRUCTURED DATA EXTRACTION</em></li>
+        <li><span>ENGINEERING</span><em>AI-NATIVE FULL STACK</em></li>
+      </ul>
     </div>
   </div>
 </section>
@@ -494,9 +460,9 @@ html { scroll-behavior: smooth; }
   <h3>一起做点有意思的事</h3>
   <p>开放合作、自由职业和全职机会</p>
   <div class="cta-links">
-    <a href="mailto:Scau201934910210@gmail.com" class="cta-icon"><i class="ti ti-mail"></i></a>
-    <a href="https://github.com/hrj-11055" target="_blank" class="cta-icon"><i class="ti ti-brand-github"></i></a>
-    <div class="cta-icon" onclick="showWechat()"><i class="ti ti-brand-wechat"></i></div>
+    <a href="mailto:Scau201934910210@gmail.com" class="cta-icon pulse-glow"><i class="ti ti-mail"></i></a>
+    <a href="https://github.com/hrj-11055" target="_blank" class="cta-icon pulse-glow"><i class="ti ti-brand-github"></i></a>
+    <div class="cta-icon pulse-glow" onclick="showWechat()"><i class="ti ti-brand-wechat"></i></div>
   </div>
   <div class="cta-labels">
     <span class="cta-lbl">邮箱</span>
@@ -507,6 +473,7 @@ html { scroll-behavior: smooth; }
 
 <footer class="footer">由 MarkHuang 设计并开发 · 2026</footer>
 
+<script src="terminal.js"></script>
 <script>
 // 滚动渐入（Intersection Observer）
 const observer = new IntersectionObserver((entries) => {
