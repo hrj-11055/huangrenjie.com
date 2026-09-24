@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>梦岭南滋补 · AI 全链路业务中枢演示系统</title>
+  <style>
+    :root {
+      --primary: #c2410c;
+      --primary-light: #fff7ed;
+      --primary-border: #fdba74;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-yellow: #f59e0b;
+      --accent-blue: #3b82f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; padding: 24px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 16px; margin-bottom: 24px; }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-badge { background: linear-gradient(135deg, #ea580c, #c2410c); color: white; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 14px; letter-spacing: 1px; }
+    .title { font-size: 20px; font-weight: 700; color: #fff; }
+    .subtitle { font-size: 13px; color: var(--text-sub); }
+    .status-badge { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 9999px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+    .dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+    .grid-2 { display: grid; grid-template-columns: 340px 1fr; gap: 24px; }
+    
+    /* Left Panel: Control / Input */
+    .panel { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; }
+    .panel-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 12px; color: var(--text-sub); margin-bottom: 6px; font-weight: 500; }
+    select, input, textarea { width: 100%; background: #0f172a; border: 1px solid var(--card-border); color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 13px; outline: none; transition: border-color 0.2s; }
+    select:focus, input:focus { border-color: var(--primary); }
+    
+    .btn-run { width: 100%; background: linear-gradient(135deg, #ea580c, #c2410c); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35); transition: transform 0.1s, opacity 0.2s; }
+    .btn-run:hover { opacity: 0.95; }
+    .btn-run:active { transform: scale(0.98); }
+
+    /* Pipeline Status Flow */
+    .pipeline-flow { margin-top: 24px; }
+    .pipeline-step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; position: relative; }
+    .step-indicator { width: 24px; height: 24px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; flex-shrink: 0; margin-top: 2px; }
+    .step-indicator.done { background: var(--accent-green); color: black; }
+    .step-indicator.running { background: var(--accent-yellow); color: black; animation: spin 1s infinite linear; }
+    .step-info { flex: 1; }
+    .step-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .step-desc { font-size: 11px; color: var(--text-sub); }
+
+    /* Right Panel: Agent Outputs */
+    .tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--card-border); margin-bottom: 16px; overflow-x: auto; }
+    .tab { padding: 10px 16px; font-size: 13px; font-weight: 500; color: var(--text-sub); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .tab.active { color: #fdba74; border-bottom-color: #ea580c; font-weight: 600; }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Content Cards */
+    .content-box { background: #0f172a; border: 1px solid var(--card-border); border-radius: 8px; padding: 16px; margin-bottom: 14px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+    .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+    /* Compliance Diff View */
+    .diff-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+    .diff-table th, .diff-table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--card-border); }
+    .diff-table th { background: #1e293b; color: var(--text-sub); font-weight: 600; }
+    .violation-highlight { background: rgba(239, 68, 68, 0.25); color: #fca5a5; padding: 2px 6px; border-radius: 4px; text-decoration: line-through; }
+    .safe-highlight { background: rgba(16, 185, 129, 0.25); color: #6ee7b7; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+    /* Script Board */
+    .script-row { display: grid; grid-template-columns: 80px 140px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--card-border); font-size: 12px; }
+    .script-row:last-child { border-bottom: none; }
+    .script-time { color: #fdba74; font-weight: 600; }
+    .script-scene { color: var(--text-sub); }
+
+    /* Chat Preview */
+    .chat-bubble { max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 13px; line-height: 1.5; margin-bottom: 12px; }
+    .chat-user { background: #334155; color: #fff; margin-left: auto; border-bottom-right-radius: 2px; }
+    .chat-agent { background: #1e293b; border: 1px solid var(--card-border); color: #f1f5f9; border-bottom-left-radius: 2px; }
+    .agent-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 11px; color: #fdba74; font-weight: 600; }
+
+    .stat-pill { background: #1e293b; border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; text-align: center; }
+    .stat-val { font-size: 20px; font-weight: 700; color: #fff; }
+    .stat-lbl { font-size: 11px; color: var(--text-sub); margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="logo-area">
+      <span class="logo-badge">梦岭南滋补</span>
+      <div>
+        <div class="title">企业级 AI Agent 全链路闭环业务中枢</div>
+        <div class="subtitle">从 WorkBuddy 个人离散提问 ➔ 升级为企业端到端协同作业流水线</div>
+      </div>
+    </div>
+    <div class="status-badge">
+      <span class="dot"></span> 4 组协同 Agent 就绪
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="grid-2">
+    <!-- Left Column: Trigger & Input -->
+    <div class="panel">
+      <div class="panel-title">
+        <span>⚡ 业务任务输入台</span>
+      </div>
+
+      <div class="form-group">
+        <label>选择梦岭南核心产品</label>
+        <select id="productSelect" onchange="updateProduct()">
+          <option value="huajiao" selected>梦岭南·纯牛奶燕麦花胶（75g/即食）</option>
+          <option value="yanwo">梦岭南·五红椰乳燕窝粥（中大联合研发）</option>
+          <option value="xiyangsen">梦岭南·加拿大进口西洋参切片礼盒</option>
+          <option value="doujiang">梦岭南·高蛋白燕窝银耳豆浆粉</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>目标营销场景 / 消费者画像</label>
+        <select id="scenarioSelect" onchange="updateProduct()">
+          <option value="office">熬夜打工人·午后轻滋补（抗初老/低糖）</option>
+          <option value="pregnant">孕期/哺乳期妈妈·无添加安全营养</option>
+          <option value="gift">中秋重阳过节·送闺蜜长辈高档礼盒</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>达人/渠道合作标签（可选）</label>
+        <input type="text" id="kolTag" value="【大潘/吉杰专享】直播爆款机制" placeholder="如：大潘专享、小红书KOC种草">
+      </div>
+
+      <button class="btn-run" onclick="runPipeline()">
+        <span>🚀 启动全链路 Agent 流水线</span>
+      </button>
+
+      <!-- Pipeline Execution Visualizer -->
+      <div class="pipeline-flow">
+        <div class="pipeline-step">
+          <div class="step-indicator done" id="step1-ind">✓</div>
+          <div class="step-info">
+            <div class="step-name">Agent 1: 药理配伍与受众洞察</div>
+            <div class="step-desc">拆解营养成分、中医食性、用户情绪痛点</div>
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="step-indicator done" id="step2-ind">✓</div>
+          <div class="step-info">
+            <div class="step-name">Agent 2: 爆款内容创作与分镜设计</div>
+            <div class="step-desc">生成小红书爆款图文 + 抖音即食分镜脚本</div>
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="step-indicator done" id="step3-ind" style="background:#f59e0b; color:#000;">!</div>
+          <div class="step-info">
+            <div class="step-name">Agent 3: 广告法合规与打假防火墙</div>
+            <div class="step-desc">逐字扫描滋补品违禁词，自动安全纠偏替换</div>
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="step-indicator done" id="step4-ind">✓</div>
+          <div class="step-info">
+            <div class="step-name">Agent 4: 私域企微“金牌营养顾问”</div>
+            <div class="step-desc">应答疑难问诊 + 28天复购跟进话术卡片</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+        <div class="stat-pill">
+          <div class="stat-val" style="color: #34d399;">3.8 秒</div>
+          <div class="stat-lbl">全链产出耗时</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val" style="color: #60a5fa;">100%</div>
+          <div class="stat-lbl">广告法合规率</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Agent Output Workspace -->
+    <div class="panel">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('tab1', this)">📕 小红书爆款图文</button>
+        <button class="tab" onclick="switchTab('tab2', this)">🎬 抖音/视频号分镜脚本</button>
+        <button class="tab" onclick="switchTab('tab3', this)">🛡️ 广告法审查与纠错 (核心)</button>
+        <button class="tab" onclick="switchTab('tab4', this)">💬 私域顾问与复购闭环</button>
+      </div>
+
+      <!-- Tab 1: Xiaohongshu -->
+      <div id="tab1" class="tab-content active">
+        <div class="content-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <span class="badge badge-blue">小红书高赞爆款结构</span>
+            <span style="font-size:11px; color:var(--text-sub);">网感测试分：96/100</span>
+          </div>
+          <div style="font-size:15px; font-weight:700; color:#fdba74; margin-bottom:10px;" id="redTitle">
+            🔥 谁懂啊！把打工人的奶茶换成这碗纯牛奶花胶，整个办公室都在要链接...
+          </div>
+          <div style="font-size:13px; line-height:1.7; color:#cbd5e1; white-space:pre-line;" id="redBody">
+姐妹们，真心劝退每天下午吨吨吨高糖奶茶！🤦‍♀️
+以前一到下午三点就犯困、皮肤发黄发干，脸垮得连遮瑕都盖不住！
+
+后来被广东本地同事安利了这款【梦岭南纯牛奶燕麦花胶】：
+✨ 真正用纯牛奶鲜炖，一滴水都不加！浓郁奶香完全把鱼胶的腥味压下去了，像在吃港式甜品！
+✨ 里面的花胶块大厚实，咬下去QQ弹弹，满满的胶质！搭配吸饱奶汁的软糯燕麦，低脂饱腹感还超强！
+✨ 75g精致小罐装，开盖即食，不用自己辛苦泡发炖煮几小时，打工人直接放抽屉当下午茶！
+
+关键是0蔗糖低脂肪，吃完毫无长肉负担～坚持喝了两箱，整个人的精气神都润透了！✨
+
+🏷️ #梦岭南纯牛奶花胶 #打工人下午茶 #即食花胶推荐 #办公室养生 #素颜好气色
+          </div>
+        </div>
+
+        <div class="content-box" style="margin-top:10px;">
+          <div style="font-size:12px; font-weight:600; color:var(--text-sub); margin-bottom:8px;">📸 视觉拍摄配图建议（Agent 自动生成）</div>
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; font-size:11px; color:#cbd5e1;">
+            <div style="background:#1e293b; padding:8px; border-radius:6px; border:1px solid #334155;">
+              <span style="color:#fdba74; font-weight:600;">图1（首图）：</span>办公桌真实场景，开盖拉丝特写，汤汁浓白如鲜奶。
+            </div>
+            <div style="background:#1e293b; padding:8px; border-radius:6px; border:1px solid #334155;">
+              <span style="color:#fdba74; font-weight:600;">图2（细节）：</span>勺子舀起厚实花胶块+燕麦颗粒，光泽晶莹诱人。
+            </div>
+            <div style="background:#1e293b; padding:8px; border-radius:6px; border:1px solid #334155;">
+              <span style="color:#fdba74; font-weight:600;">图3（背书）：</span>配料表特写，圈出生牛乳+深海鱼胶，强调0添加蔗糖。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Douyin Script -->
+      <div id="tab2" class="tab-content">
+        <div class="content-box">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span class="badge badge-blue">30秒短视频黄金带货脚本</span>
+            <span style="font-size:11px; color:var(--text-sub);">适用：抖音自播切片 / 达人寄样带货</span>
+          </div>
+          
+          <div class="script-row" style="background:#1e293b; font-weight:600; border:none; padding:8px 10px; border-radius:6px;">
+            <div>时间</div>
+            <div>镜头画面 (Visual)</div>
+            <div>台词口播 / 音效 (Audio)</div>
+          </div>
+
+          <div class="script-row">
+            <div class="script-time">00:00-00:03</div>
+            <div class="script-scene">【黄金前3秒】<br>特写女主角把奶茶狠狠扔进垃圾桶</div>
+            <div>“别再花25块喝满杯植脂末的假奶茶了！你以为在续命，其实越喝脸越蜡黄！”<br><span style="color:#f59e0b; font-size:10px;">[音效：清脆警报音]</span></div>
+          </div>
+
+          <div class="script-row">
+            <div class="script-time">00:03-00:10</div>
+            <div class="script-scene">拉开办公桌抽屉，拿出一罐梦岭南纯牛奶花胶，啵一声撕开铝箔盖</div>
+            <div>“看看广东女生都在偷吃什么——梦岭南这款纯牛奶花胶！开盖就是浓郁奶香，完全不腥！”</div>
+          </div>
+
+          <div class="script-row">
+            <div class="script-time">00:10-00:20</div>
+            <div class="script-scene">勺子舀起一块厚胶，晶莹剔透，DuangDuang抖动特写</div>
+            <div>“看到没！不是碎胶，是一整块实打实深海花胶！纯牛奶慢炖，加上软糯燕麦，0添加蔗糖，一瓶热量还没半个苹果高！”</div>
+          </div>
+
+          <div class="script-row">
+            <div class="script-time">00:20-00:30</div>
+            <div class="script-scene">手持两盒精美礼盒，打出直播间拍1发10瓶机制截图</div>
+            <div>“今天吉杰/大潘专属直播间，拍一箱直接发两箱！算下来一杯只要十几块，比奶茶便宜！下方小黄车手慢无！”</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Compliance Shield -->
+      <div id="tab3" class="tab-content">
+        <div class="content-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+              <span class="badge badge-red">拦截高危违禁词 2 处</span>
+              <span class="badge badge-green">已由 Agent 自动修正为合规词汇</span>
+            </div>
+            <span style="font-size:11px; color:#34d399;">● 依据《广告法》第二十八条 & 滋补食品分类审查</span>
+          </div>
+
+          <table class="diff-table">
+            <thead>
+              <tr>
+                <th>原草稿用词（高危/违法风险）</th>
+                <th>风险等级与法律法规依据</th>
+                <th>Agent 纠偏后合规用词（安全）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="violation-highlight">“补充胶原蛋白直达真皮层，紧致抗皱”</span>
+                </td>
+                <td>
+                  <span style="color:#ef4444; font-weight:600;">极高（平台封店）</span><br>
+                  普通食品不得宣称医疗/生理功能疗效，极易遭职业打假索赔。
+                </td>
+                <td>
+                  <span class="safe-highlight">“甄选深海鱼胶锁住饱满胶质，滋润焕活好气色”</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="violation-highlight">“产后孕妇大补气血，调经养颜”</span>
+                </td>
+                <td>
+                  <span style="color:#f59e0b; font-weight:600;">中高（限流扣分）</span><br>
+                  涉及中医病症与“补气血”药品功效宣称，违背食品标签通则。
+                </td>
+                <td>
+                  <span class="safe-highlight">“低脂温和营养，为孕期妈妈温润补充日常所需活力”</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="violation-highlight">“100%纯天然野生深海鱼胶”</span>
+                </td>
+                <td>
+                  <span style="color:#f59e0b; font-weight:600;">中度（虚假宣传）</span><br>
+                  禁用“100%”、“纯天然”等绝对化最高级用词。
+                </td>
+                <td>
+                  <span class="safe-highlight">“精选优质深海鱼胶，溯源道地原料”</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:12px; font-size:11px; color:var(--text-sub); line-height:1.5;">
+            💡 <strong>架构师提示：</strong> 该审查节点可无缝插入到 WorkBuddy 或飞书审批流中，任何新详情页、文案发布前必须通过此 Agent 绿灯放行。
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Private Domain & CRM -->
+      <div id="tab4" class="tab-content">
+        <div class="content-box">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span class="badge badge-green">企业微信 · AI 中医营养顾问卡片</span>
+            <span style="font-size:11px; color:var(--text-sub);">客服端协同辅助 / 毫秒级专业应答</span>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <!-- User Question -->
+            <div class="chat-bubble chat-user">
+              “你好，我体质偏湿热，容易长痘，而且有点乳腺增生，能吃你们这款纯牛奶花胶吗？会不会上火或者加重增生？”
+            </div>
+
+            <!-- Agent Suggested Answer -->
+            <div class="chat-bubble chat-agent">
+              <div class="agent-header">
+                <span>🤖 梦岭南营养顾问 Agent 智能推荐话术（一键复制发送）：</span>
+              </div>
+              亲亲您好呀！非常理解您的顾虑，给您专业分析一下：<br><br>
+              1. <strong>关于增生与体质：</strong> 梦岭南的纯牛奶花胶精选的是天然深海鱼胶，主要成分是优质蛋白质和多种微量营养素，<strong>不含任何外源性雌激素</strong>，您可以放心适量食用哦～<br>
+              2. <strong>关于湿热与上火：</strong> 传统中医认为花胶“甘平偏润”，并非温燥之物。而且我们这款是<strong>0添加蔗糖、搭配燕麦</strong>的清润配方，不仅不会滋腻上火，燕麦还能帮助运化脾胃。<br>
+              3. <strong>专属调理建议：</strong> 针对您偏湿热的特点，建议您一周享用 2~3 瓶即可；如果白天感觉湿重，可以搭配咱们家的<strong>【五指毛桃茯苓茶】</strong>一起饮用，芳香化湿、润而不燥，体感会特别清爽舒畅哦！🌿
+            </div>
+          </div>
+
+          <!-- Repurchase Reminder Agent -->
+          <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:12px;">
+            <div style="font-size:12px; font-weight:600; color:#fdba74; margin-bottom:6px;">
+              🔔 Agent 触发式复购策略（第 14 天生命周期）：
+            </div>
+            <div style="font-size:12px; color:#cbd5e1; line-height:1.6;">
+              <strong>触达时间：</strong> 客户签收后第 14 天（估算首箱10瓶已消耗完）<br>
+              <strong>推送策略：</strong> 自动生成关怀话术：“王女士，打扰您啦，看您第一箱花胶应该快见底啦，最近肠胃和气色感觉怎么样？入秋换季干燥，老客回购领专享 20 元券，搭配五指毛桃茶包更划算哦～”
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const productData = {
+    huajiao: {
+      title: "🔥 谁懂啊！把打工人的奶茶换成这碗纯牛奶花胶，整个办公室都在要链接...",
+      tag: "【大潘/吉杰专享】直播爆款机制",
+      scriptHighlight: "不是碎胶，是一整块实打实深海花胶！纯牛奶慢炖，0添加蔗糖！"
+    },
+    yanwo: {
+      title: "🍲 早餐别再吃干硬面包了！中大教授联合研发的燕窝粥，低糖低脂超养人！",
+      tag: "【中大研发】孕妇月子及精致白领",
+      scriptHighlight: "中大教授团队联合研发，五红配方椰乳打底，每一口都是满满金丝燕窝丝！"
+    },
+    xiyangsen: {
+      title: "🍂 换季容易乏力上虚火？给长辈准备这一盒加拿大西洋参，懂行的人都夸会买！",
+      tag: "高端送礼 / 滋阴清热大单品",
+      scriptHighlight: "地道加拿大进口，年头足参味浓，薄如蝉翼，泡水煲汤清润一整天！"
+    },
+    doujiang: {
+      title: "🥛 喝过这个燕窝银耳豆浆粉，外面的早餐豆浆真的喝不下去了...",
+      tag: "高蛋白代餐 / 健身滋养早餐",
+      scriptHighlight: "非转基因大豆配上研磨本草银耳，入口顺滑像丝绒，高蛋白元气满满！"
+    }
+  };
+
+  function updateProduct() {
+    const prod = document.getElementById('productSelect').value;
+    const data = productData[prod];
+    if(data) {
+      document.getElementById('redTitle').innerText = data.title;
+      document.getElementById('kolTag').value = data.tag;
+    }
+  }
+
+  function switchTab(tabId, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  function runPipeline() {
+    const btn = document.querySelector('.btn-run');
+    btn.innerHTML = '<span>⚙️ Agents 正在协同处理中...</span>';
+    btn.style.opacity = '0.7';
+
+    setTimeout(() => {
+      btn.innerHTML = '<span>🚀 启动全链路 Agent 流水线</span>';
+      btn.style.opacity = '1';
+      alert('流水线执行完毕！已针对选品生成全新的爆款文案、分镜脚本、广告法纠偏报告与企微策略。');
+    }, 600);
+  }
+</script>
+</body>
+</html>
