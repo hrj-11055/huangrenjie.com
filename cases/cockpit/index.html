@@ -30,6 +30,8 @@
     .title { font-size: 20px; font-weight: 700; color: #fff; }
     .subtitle { font-size: 13px; color: var(--text-sub); }
     .status-badge { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 9999px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+    .header-status-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .demo-badge { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); padding: 4px 10px; border-radius: 9999px; font-size: 12px; display: flex; align-items: center; gap: 6px; font-weight: 600; }
     .dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
     @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
 
@@ -105,12 +107,17 @@
     <div class="logo-area">
       <span class="logo-badge">梦岭南滋补</span>
       <div>
-        <div class="title">企业级 AI Agent 全链路闭环业务中枢</div>
+        <div class="title">企业级 AI Agent 全链路闭环业务中枢（交互演示）</div>
         <div class="subtitle">从 WorkBuddy 个人离散提问 ➔ 升级为企业端到端协同作业流水线</div>
       </div>
     </div>
-    <div class="status-badge">
-      <span class="dot"></span> 4 组协同 Agent 就绪
+    <div class="header-status-group">
+      <div class="demo-badge">
+        ▶ 交互式演示 · 输出为预录示例
+      </div>
+      <div class="status-badge">
+        <span class="dot"></span> 演示模式 · 预录示例数据
+      </div>
     </div>
   </header>
 
@@ -358,7 +365,7 @@
         <div class="content-box">
           <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
             <span class="badge badge-green">企业微信 · AI 中医营养顾问卡片</span>
-            <span style="font-size:11px; color:var(--text-sub);">客服端协同辅助 / 毫秒级专业应答</span>
+            <span style="font-size:11px; color:var(--text-sub);">客服端协同辅助 / 示例应答展示</span>
           </div>
 
           <div style="margin-bottom:16px;">
@@ -437,13 +444,13 @@
 
   function runPipeline() {
     const btn = document.querySelector('.btn-run');
-    btn.innerHTML = '<span>⚙️ Agents 正在协同处理中...</span>';
+    btn.innerHTML = '<span>⚙️ 正在回放预录演示流程...</span>';
     btn.style.opacity = '0.7';
 
     setTimeout(() => {
       btn.innerHTML = '<span>🚀 启动全链路 Agent 流水线</span>';
       btn.style.opacity = '1';
-      alert('流水线执行完毕！已针对选品生成全新的爆款文案、分镜脚本、广告法纠偏报告与企微策略。');
+      alert('演示流程播放完毕！以上为预录示例数据，展示该流水线在真实项目中交付爆款文案、分镜脚本、广告法纠偏报告与企微策略的形态。');
     }, 600);
   }
 </script>
