@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我是谁 · Mark 的多维星图 — MarkHuang</title>
+    <meta name="description" content="Mark 的个人多维画像星图：性格、爱好、技能、事业、价值观、目标与生活，基于 114 篇 flomo 笔记与 233 段 AI 对话洞察生成。">
+    <meta name="keywords" content="MarkHuang,个人画像,INTP,独立开发者,FDE,AI讲师,vibecoding,多维星图">
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+    <link rel="stylesheet" href="/css/bundle.min.66d80f86bd5a65d9032d1ecc5c4f5871312a7c11b4a4699ca20dc5f9f81cdf70.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mark",
+        "url": "https://huangrenjie.com/me.html",
+        "jobTitle": "独立开发者 · AI 原生 Builder · AI 讲师",
+        "description": "深度内省的成长追寻者。24 岁，正在从「知道」走向「做到」。",
+        "knowsAbout": ["AI 应用开发", "Vibecoding", "Prompt 工程", "Python 自动化", "TTS 语音克隆", "知识管理"]
+    }
+    </script>
+
+    <style>
+        :root {
+            --paper-bg: #f3ede2;
+            --paper-surface: #f8f4ec;
+            --paper-surface-2: #fdfaf6;
+            --paper-ink: #1c1510;
+            --paper-ink-2: #3d3028;
+            --paper-ink-3: #6a5a4a;
+            --paper-rule: #d8d0c2;
+            --paper-vermilion: #ba3f14;
+            --f-serif: 'Noto Serif SC', Georgia, serif;
+            --f-sans: 'Noto Sans SC', 'PingFang SC', sans-serif;
+            --f-mono: 'JetBrains Mono', Menlo, monospace;
+        }
+
+        /* reset 只作用于本页内容区，避免覆盖站点主题的导航/页脚样式 */
+        .me-page, .me-page *, .me-page *::before, .me-page *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        .me-page blockquote { border: 0; background: transparent; border-radius: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--paper-bg);
+            color: var(--paper-ink);
+            font-family: var(--f-sans);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---------- Hero ---------- */
+        .me-hero { max-width: 1100px; margin: 0 auto; padding: 44px 24px 6px; text-align: center; }
+        .me-hero-kicker {
+            font-family: var(--f-mono);
+            font-size: 12px;
+            letter-spacing: .35em;
+            color: var(--paper-vermilion);
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+        .me-hero h1 {
+            font-family: var(--f-serif);
+            font-weight: 900;
+            font-size: clamp(34px, 5.5vw, 64px);
+            line-height: 1.12;
+            letter-spacing: -0.01em;
+        }
+        .me-hero h1 .accent { color: var(--paper-vermilion); }
+        .me-hero-sub {
+            margin: 20px auto 0;
+            max-width: 620px;
+            font-family: var(--f-serif);
+            font-size: clamp(15px, 1.6vw, 18px);
+            line-height: 1.8;
+            color: var(--paper-ink-2);
+        }
+        .me-hero-sub b { color: var(--paper-ink); font-weight: 700; }
+
+        /* ---------- 星图容器 ---------- */
+        .galaxy-wrap {
+            position: relative;
+            max-width: 1240px;
+            margin: 14px auto 0;
+            padding: 0 16px;
+        }
+        #galaxy {
+            width: 100%;
+            height: clamp(460px, 66vh, 760px);
+            border: 1px solid var(--paper-rule);
+            border-radius: 14px;
+            background:
+                radial-gradient(ellipse at 50% 42%, rgba(255,252,246,.9) 0%, rgba(243,237,226,0) 62%),
+                var(--paper-surface);
+            box-shadow: 0 8px 32px rgba(28,21,16,.10);
+            cursor: grab;
+            touch-action: none;
+            display: block;
+        }
+        #galaxy.dragging { cursor: grabbing; }
+        #galaxy.loading { opacity: .35; }
+
+        .galaxy-hint {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 18px;
+            font-family: var(--f-mono);
+            font-size: 11px;
+            letter-spacing: .12em;
+            color: var(--paper-ink-3);
+            background: rgba(253,250,246,.85);
+            border: 1px solid var(--paper-rule);
+            border-radius: 999px;
+            padding: 6px 14px;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* 维度图例 */
+        .legend {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 178px;
+            z-index: 5;
+        }
+        .legend-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--paper-ink-2);
+            background: rgba(253,250,246,.92);
+            border: 1px solid var(--paper-rule);
+            border-radius: 999px;
+            padding: 5px 12px 5px 9px;
+            cursor: pointer;
+            transition: all .18s ease;
+            user-select: none;
+        }
+        .legend-chip .dot {
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            flex: none;
+        }
+        .legend-chip:hover { border-color: var(--paper-ink-3); transform: translateX(2px); }
+        .legend-chip.active { border-color: var(--paper-vermilion); color: var(--paper-ink); box-shadow: 0 0 0 3px rgba(186,63,20,.10); }
+
+        .galaxy-actions { position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; z-index: 5; }
+        .g-btn {
+            font-family: var(--f-mono);
+            font-size: 11.5px;
+            color: var(--paper-ink-2);
+            background: rgba(253,250,246,.92);
+            border: 1px solid var(--paper-rule);
+            border-radius: 999px;
+            padding: 6px 13px;
+            cursor: pointer;
+            transition: all .18s ease;
+        }
+        .g-btn:hover { border-color: var(--paper-vermilion); color: var(--paper-vermilion); }
+
+        /* 悬停释义气泡 */
+        #tip {
+            position: fixed;
+            z-index: 60;
+            max-width: 300px;
+            background: #fffdf9;
+            border: 1px solid var(--paper-rule-strong);
+            border-radius: 10px;
+            box-shadow: 0 8px 28px rgba(28,21,16,.18);
+            padding: 12px 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .12s ease;
+        }
+        #tip .t-name { font-family: var(--f-serif); font-weight: 700; font-size: 15px; }
+        #tip .t-dim { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .1em; margin: 3px 0 7px; }
+        #tip .t-desc { font-size: 12.5px; line-height: 1.65; color: var(--paper-ink-2); }
+
+        /* 维度详情面板 */
+        #panel {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            bottom: 16px;
+            width: min(360px, calc(100% - 32px));
+            background: rgba(253,250,246,.97);
+            border: 1px solid var(--paper-rule-strong);
+            border-radius: 14px;
+            box-shadow: 0 12px 40px rgba(28,21,16,.16);
+            z-index: 10;
+            padding: 22px;
+            overflow-y: auto;
+            transform: translateX(24px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all .28s cubic-bezier(.2,.7,.3,1);
+        }
+        #panel.open { transform: translateX(0); opacity: 1; visibility: visible; }
+        #panel .p-close {
+            position: absolute; top: 14px; right: 14px;
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--paper-rule);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--paper-ink-3);
+            cursor: pointer; font-size: 13px;
+        }
+        #panel .p-close:hover { color: var(--paper-vermilion); border-color: var(--paper-vermilion); }
+        #panel .p-kicker { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .25em; margin-bottom: 8px; }
+        #panel h3 { font-family: var(--f-serif); font-weight: 900; font-size: 24px; margin-bottom: 4px; }
+        #panel .p-count { font-size: 12px; color: var(--paper-ink-3); margin-bottom: 14px; }
+        #panel .p-desc { font-family: var(--f-serif); font-size: 13.5px; line-height: 1.85; color: var(--paper-ink-2); border-left: 3px solid; padding-left: 12px; margin-bottom: 18px; }
+        .p-tag { padding: 10px 0; border-bottom: 1px dashed var(--paper-rule); }
+        .p-tag:last-child { border-bottom: none; }
+        .p-tag .pt-head { display: flex; align-items: baseline; gap: 10px; }
+        .p-tag .pt-name { font-family: var(--f-serif); font-weight: 700; font-size: 15.5px; }
+        .p-tag .pt-heat { font-family: var(--f-mono); font-size: 10px; letter-spacing: 2px; }
+        .p-tag .pt-desc { font-size: 12.5px; line-height: 1.7; color: var(--paper-ink-2); margin-top: 4px; }
+
+        /* ---------- 数据来源条 ---------- */
+        .sources {
+            max-width: 980px;
+            margin: 46px auto 0;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 14px;
+        }
+        .src-card {
+            background: var(--paper-surface);
+            border: 1px solid var(--paper-rule);
+            border-radius: 12px;
+            padding: 18px 16px;
+            text-align: center;
+        }
+        .src-card .n { font-family: var(--f-serif); font-weight: 900; font-size: 30px; color: var(--paper-vermilion); }
+        .src-card .l { font-size: 12.5px; color: var(--paper-ink-3); margin-top: 4px; }
+
+        /* ---------- 一句话画像 ---------- */
+        .verdict {
+            max-width: 860px;
+            margin: 52px auto 0;
+            padding: 0 24px;
+            text-align: center;
+        }
+        .verdict .mark-seal {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 52px; height: 52px;
+            border: 2px solid var(--paper-vermilion);
+            border-radius: 8px;
+            color: var(--paper-vermilion);
+            font-family: var(--f-serif); font-weight: 900; font-size: 20px;
+            margin-bottom: 18px;
+            transform: rotate(-4deg);
+        }
+        .verdict blockquote {
+            font-family: var(--f-serif);
+            font-weight: 700;
+            font-size: clamp(20px, 3vw, 30px);
+            line-height: 1.6;
+            border: 0; background: transparent; border-radius: 0;
+        }
+        .verdict blockquote .accent { color: var(--paper-vermilion); }
+        .verdict cite { display: block; font-style: normal; font-size: 13px; color: var(--paper-ink-3); margin-top: 14px; }
+
+        /* ---------- 星图旁注 · 语录 ---------- */
+        .quotes { max-width: 1000px; margin: 58px auto 0; padding: 0 24px; }
+        .q-kicker {
+            font-family: var(--f-mono); font-size: 11px; letter-spacing: .3em;
+            color: var(--paper-vermilion); text-align: center; margin-bottom: 22px;
+        }
+        .q-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+        .q-item {
+            font-family: var(--f-serif);
+            font-size: 14.5px;
+            line-height: 1.85;
+            color: var(--paper-ink-2);
+            background: var(--paper-surface);
+            border: 1px solid var(--paper-rule);
+            border-radius: 12px;
+            padding: 18px 20px;
+        }
+        .q-item span { display: block; font-family: var(--f-sans); font-size: 12px; color: var(--paper-ink-3); margin-top: 8px; }
+
+        /* ---------- 平面标签云 ---------- */
+        .cloud { max-width: 1060px; margin: 64px auto 0; padding: 0 24px; }
+        .cloud h2 { font-family: var(--f-serif); font-weight: 900; font-size: clamp(22px, 3vw, 30px); text-align: center; }
+        .cloud .cloud-sub { text-align: center; font-size: 13px; color: var(--paper-ink-3); margin: 8px 0 30px; }
+        .dim-block { margin-bottom: 26px; }
+        .dim-block .db-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .dim-block .db-head .dot { width: 11px; height: 11px; border-radius: 50%; }
+        .dim-block .db-head h3 { font-family: var(--f-serif); font-weight: 700; font-size: 18px; }
+        .dim-block .db-head .db-count { font-family: var(--f-mono); font-size: 11px; color: var(--paper-ink-3); letter-spacing: .1em; }
+        .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+        .chip {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--paper-ink);
+            background: var(--paper-surface-2);
+            border: 1px solid var(--paper-rule);
+            border-radius: 999px;
+            padding: 7px 15px;
+            cursor: default;
+            transition: all .15s ease;
+        }
+        .chip:hover { border-color: var(--paper-vermilion); color: var(--paper-vermilion); transform: translateY(-2px); }
+        .chip.big { font-size: 15.5px; font-weight: 700; }
+        .chip.mid { font-size: 14.2px; }
+
+        .footnote {
+            max-width: 860px; margin: 46px auto 70px; padding: 0 24px;
+            text-align: center; font-size: 12.5px; line-height: 1.8; color: var(--paper-ink-3);
+        }
+        .footnote a { color: var(--paper-vermilion); text-decoration: none; }
+
+        /* ---------- 移动端 ---------- */
+        @media (max-width: 720px) {
+            .me-hero { padding-top: 46px; }
+            #galaxy { height: 58vh; min-height: 420px; }
+            .legend {
+                position: static;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                max-width: 100%;
+                margin-bottom: 10px;
+                padding-bottom: 4px;
+                scrollbar-width: none;
+            }
+            .legend::-webkit-scrollbar { display: none; }
+            .legend-chip { flex: none; font-size: 12px; padding: 4px 10px 4px 8px; }
+            .galaxy-actions { top: auto; bottom: 52px; }
+            #panel {
+                top: auto; left: 12px; right: 12px; bottom: 12px;
+                width: auto; max-height: 52vh;
+                transform: translateY(30px);
+            }
+            #panel.open { transform: translateY(0); }
+            .galaxy-hint { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+
+<body>
+    <script src="/js/three.min.js"></script>
+
+    <!-- ===== 导航（与整站一致） ===== -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a class="nav-logo" href="/">Mark<span>Huang</span></a>
+            <div class="nav-links">
+                <a href="/#services">核心服务</a>
+                <a href="/#cases">落地案例</a>
+                <a href="/#process">交付流程</a>
+                <a href="/articles/">沉思录与白皮书</a>
+                <a href="/me.html">我是谁</a>
+            </div>
+            <a class="nav-cta" href="/#contact"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<span>预约咨询</span></a>
+        </div>
+    </nav>
+
+    <div class="me-page">
+
+    <!-- ===== Hero ===== -->
+    <header class="me-hero">
+        <div class="me-hero-kicker">PERSONAL CONSTELLATION · 认识你自己</div>
+        <h1>一张会转的星图，<span class="accent">认识 Mark</span></h1>
+        <p class="me-hero-sub">
+            把 <b>114 篇 flomo 笔记</b>、<b>11000+ 条 Hermes 对话</b> 与 <b>11 类主题分析</b> 投射到一张星图上——
+            八个维度星团，<b id="tagCount">——</b> 个特征标签。从 <b>INTP</b> 到 <b>拖延症</b>，优点缺点都亮出来。拖一拖，看看这个人的成色。
+        </p>
+    </header>
+
+    <!-- ===== 3D 星图 ===== -->
+    <div class="galaxy-wrap">
+        <div class="legend" id="legend"></div>
+        <div class="galaxy-actions">
+            <button class="g-btn" id="btnRotate" title="暂停/继续自动旋转"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg> 旋转</button>
+            <button class="g-btn" id="btnReset" title="回到初始视角"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> 复位</button>
+        </div>
+        <canvas id="galaxy" class="loading"></canvas>
+        <div class="galaxy-hint">拖拽旋转 · 滚轮缩放 · 悬停看释义 · 点击星团聚焦</div>
+
+        <aside id="panel" aria-label="维度详情">
+            <button class="p-close" id="panelClose" aria-label="关闭"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            <div class="p-kicker" id="pKicker"></div>
+            <h3 id="pName"></h3>
+            <div class="p-count" id="pCount"></div>
+            <p class="p-desc" id="pDesc"></p>
+            <div id="pTags"></div>
+        </aside>
+    </div>
+
+    <!-- 悬停气泡 -->
+    <div id="tip">
+        <div class="t-name" id="tipName"></div>
+        <div class="t-dim" id="tipDim"></div>
+        <div class="t-desc" id="tipDesc"></div>
+    </div>
+
+    <!-- ===== 数据来源 ===== -->
+    <section class="sources">
+        <div class="src-card"><div class="n">114</div><div class="l">篇 flomo 自我笔记</div></div>
+        <div class="src-card"><div class="n">11000+</div><div class="l">条 Hermes Agent 对话</div></div>
+        <div class="src-card"><div class="n">233</div><div class="l">段 AI 对话记录</div></div>
+        <div class="src-card"><div class="n">8</div><div class="l">个维度星团</div></div>
+    </section>
+
+    <!-- ===== 一句话画像 ===== -->
+    <section class="verdict">
+        <div class="mark-seal">识</div>
+        <blockquote>
+            「深度内省的成长追寻者」——<br>
+            INTP，学习力 <span class="accent">5/5</span>，行动力 <span class="accent">3/5</span>。<br>
+            行动力的缺口，正用 <span class="accent">Agent 外包</span> 一点点焊上。
+        </blockquote>
+        <cite>—— 认知画像（114 篇笔记 · 2026-03）× Hermes Agent 画像（11000+ 条对话 · 2026-10）交叉验证</cite>
+    </section>
+
+    <!-- ===== 星图旁注 · 语录 ===== -->
+    <section class="quotes">
+        <div class="q-kicker">MARGINALIA · 他说过</div>
+        <div class="q-grid">
+            <div class="q-item">「我是一个学习能力很强，但是行动能力比较弱的人。」<span>—— flomo 笔记里最诚实的一句，也是这张星图的起点</span></div>
+            <div class="q-item">「入此行业本是为了戒游戏瘾，如今得偿所愿。」<span>—— 金盆洗手的代练生涯总结</span></div>
+            <div class="q-item">「只有想不到，没有做不到。」<span>—— Hermes 档案里的座右铭，AI 时代的底气</span></div>
+            <div class="q-item">「你比大多数人厉害就好，不用比全部人都厉害。所有事情都是一样的道理。」</div>
+        </div>
+    </section>
+
+    <!-- ===== 平面标签云（无 WebGL 时的完整降级 + SEO） ===== -->
+    <section class="cloud">
+        <h2>全部标签一览</h2>
+        <p class="cloud-sub">星图转不动？标签都在这里。字号越大，分量越重。</p>
+        <div id="cloudBody"></div>
+        <noscript>
+            <p style="text-align:center;margin-top:20px;">启用 JavaScript 可查看可交互的 3D 星图。</p>
+        </noscript>
+    </section>
+
+    <div class="footnote">
+        <p>本页属于 <a href="/">MarkHuang.com</a> · 数据源：Obsidian「认识你自己」知识库（2026-03 建档，2026-10 更新）× Hermes Agent 记忆与对话档案<br>
+        苏格拉底说「认识你自己」——这张图是答案的一半，另一半在路上。</p>
+    </div>
+
+    </div><!-- /.me-page -->
+
+    <!-- ===== Footer（与整站一致） ===== -->
+    <footer class="footer">
+        <div class="footer-social">
+            <a href="mailto:Scau201934910210@gmail.com" title="邮箱"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7"/><path d="M3 7l9 6 9-6"/></svg></a>
+            <a href="https://github.com/hrj-11055" target="_blank" rel="noopener" title="GitHub"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a>
+            <span class="footer-soon" title="B 站：筹备中"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a4 4 0 014-4h10a4 4 0 014 4v6a4 4 0 01-4 4H7a4 4 0 01-4-4v-6"/><path d="M8 3l2 3"/><path d="M16 3l-2 3"/><path d="M9 13v-2"/><path d="M15 11v2"/></svg></span>
+            <a href="weixin://dl/chat?markhuang_ai" title="微信号：markhuang_ai"><svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 10c3.038.0 5.5 2.015 5.5 4.5.0 1.397-.778 2.645-2 3.47V20l-1.964-1.178A6.649 6.649.0 0116.5 19c-3.038.0-5.5-2.015-5.5-4.5s2.462-4.5 5.5-4.5"/><path d="M11.197 15.698c-.69.196-1.43.302-2.197.302a8.008 8.008.0 01-2.612-.432L4 17v-2.801C2.763 13.117 2 11.635 2 10c0-3.314 3.134-6 7-6 3.782.0 6.863 2.57 7 5.785v.233"/><path d="M10 8h.01"/><path d="M7 8h.01"/><path d="M15 14h.01"/><path d="M18 14h.01"/></svg></a>
+        </div>
+        <p class="footer-copy">由 MarkHuang 设计并开发 · 2026</p>
+    </footer>
+
+    <script>
+    /* =====================================================
+       数据：Mark 的多维画像
+       s: 分量 3=大 2=中 1=小；d: 释义
+    ===================================================== */
+    const PROFILE = {
+        center: { name: 'Mark', sub: '24 · INTP · AI 原生 Builder' },
+        dims: [
+            {
+                key: 'psy', name: '性格内核', color: '#1c1510',
+                desc: 'APESK 测评 + Hermes 对话推断 + 114 篇笔记三方互证：出厂设置 INTP，一台永不停机的内省引擎。',
+                tags: [
+                    { t: 'INTP', s: 3, d: '逻辑学家型——APESK 深度测评 + Hermes 对话推断双重认证。靠分析理解世界，靠独处恢复能量。' },
+                    { t: '深度自我觉察', s: 3, d: '认知画像认定的超强项：114 篇笔记里 61.4% 在自我对话。比大多数人更了解自己——包括缺点。' },
+                    { t: '想法永动机', s: 3, d: 'Hermes 档案原话：想法极其活跃，擅长规划与布局。点子密度远大于时间预算。' },
+                    { t: '底层逻辑控', s: 2, d: '钻研抽象架构与第一性原理，拆解多 Agent 协作是娱乐活动。' },
+                    { t: '反驳型思维', s: 2, d: '批判性思维出厂设置：先问为什么，再决定信不信。' },
+                    { t: '思考的巨人', s: 2, d: '认知画像原话：「思考的巨人，行动的凡人」。下半句见隔壁 Bug 单。' },
+                    { t: '多线程工作者', s: 2, d: '20+ 并行项目切换自如，唯一痛点是每次切换都要重新预热上下文。' },
+                    { t: '学习力 MAX', s: 2, d: '快速吸收新知识、跨领域整合。成长驱动型特质出现率 30.7%。' },
+                    { t: '实验精神', s: 2, d: '会主动设计「自我对话实验」来挖掘自己潜意识的人。' },
+                    { t: '自嘲型幽默', s: 2, d: '内心戏十足的搞笑担当，笔记里高频出现「寄了」「血亏」「扯淡」。' },
+                    { t: '假装高冷', s: 2, d: '经典防御机制：内心渴望认可，表面波澜不惊。' },
+                    { t: '书面表达 > 口头', s: 2, d: '文字是主场，114 篇笔记只有 1 篇对话记录。' },
+                    { t: 'i 人', s: 1, d: '深度大于广度，独处充电，低社交耗电。' },
+                ]
+            },
+            {
+                key: 'bug', name: '性格 Bug 单', color: '#8c2f39',
+                desc: '不硬扛性格 Bug，当产品需求修：拖延外包给 Agent、打卡改成定时推送、学完必须输出一遍。修 Bug 本身成了闪光点。',
+                tags: [
+                    { t: '拖延症', s: 3, d: '头号 Bug，本人亲自点名：68 次「自律」标签 vs 滴答清单打卡全线失败。已上线解法——日常交付全部外包给 Agent 追踪。' },
+                    { t: '知行差距', s: 2, d: '「知道」和「做到」之间隔着一条银河。自评：学习能力 5 星，执行力 3 星。对策：知行流——学完必须直接输出一遍才算入库。' },
+                    { t: '80-90% 卡点', s: 2, d: 'Hermes 档案发现：开局风驰电掣，收尾油尽灯枯——临近完成的机械执行最耗电。' },
+                    { t: '三分钟热度', s: 1, d: '自评弱点榜眼。对策：广泛探索后再收窄，专注 2-3 个长期项目。' },
+                    { t: '完美主义', s: 2, d: '对自己要求高到难以享受当下成就，正在练习「完成比完美重要」。' },
+                    { t: '夜猫子', s: 2, d: '2022 年天天 5 点睡出过健康警告，现为「睡眠第一」信徒（偶尔破戒）。' },
+                    { t: '反思性焦虑', s: 1, d: '过度自我觉察的副作用：想太多。解药是自我慈悲和写下来。' },
+                    { t: '0→1→遗忘→0', s: 1, d: '自嘲项目循环律。修它的补丁叫 desktop_radar.py——用雷达监控自己的兴趣。' },
+                    { t: '机械打卡绝缘体', s: 2, d: '滴答清单习惯打卡全部失败后彻底想通：是创作者不是打卡机器，硬性死线才配用清单。' },
+                ]
+            },
+            {
+                key: 'fun', name: '爱好星区', color: '#ba3f14',
+                desc: '输出狂魔的输入口：两轮上的风、峡谷里的团战、玄幻世界的百万字、陈奕迅的歌单。',
+                tags: [
+                    { t: '王者荣耀巅峰 2200', s: 3, d: '主玩打野，本命橘右京「万战橘子」，排位最高 150 星——半职业水平。' },
+                    { t: '前游戏代练', s: 2, d: '真接过单，两次被骗后金盆洗手。「入此行业本是为了戒游戏瘾，如今得偿所愿。」' },
+                    { t: '骑行', s: 3, d: '锁鞋、码表、心率带、能量胶全套装备，目标单日 100 公里长距离。' },
+                    { t: '玄幻网文', s: 3, d: '斗罗大陆、遮天、神印王座、牧神记——唐家三少与天蚕土豆全收录。' },
+                    { t: '陈奕迅听众', s: 2, d: '《陀飞轮》《苦瓜》《最佳损友》《葡萄成熟时》循环播放。' },
+                    { t: '读书拆书', s: 3, d: '《思考快与慢》《刻意练习》已被拆成成片——读书人的尽头是讲书。' },
+                    { t: '国漫', s: 2, d: '追番且自己动手：用 AI 批量做动漫解说视频。' },
+                    { t: 'KTV 苦情歌 18 连', s: 1, d: '一整张苦情歌单的拥有者，《香水有毒》《痴心绝对》起手。' },
+                    { t: '羽毛球', s: 1, d: '挥拍运动爱好者。' },
+                    { t: '纸牌魔术', s: 1, d: '飞纸牌、叠纸机场合活跃分子。' },
+                    { t: '桌搭数码', s: 1, d: 'dream desk 清单控：4K 屏、客制化键盘、人体工学椅，无人机在愿望单。' },
+                ]
+            },
+            {
+                key: 'skill', name: '技能装备', color: '#2e4f6e',
+                desc: '从提示词到服务器全链路的 AI 手艺人：让 AI 干活，也教别人让 AI 干活。',
+                tags: [
+                    { t: 'Vibecoding', s: 3, d: 'Claude Code 重度用户，目标每月 1 个产品 × 18 个月。' },
+                    { t: 'AI 全栈', s: 3, d: '微信小程序 → 后端 → 服务器运维 → 内容流水线，一个人就是一支队伍。' },
+                    { t: 'Python 自动化', s: 3, d: '桌面雷达、爬虫、批量生产脚本的主力语言。' },
+                    { t: 'Prompt 工程', s: 2, d: '吃饭手艺，网站上的「提示生成专家」就是作品。' },
+                    { t: 'TTS 声音克隆', s: 2, d: 'VoxCPM2 玩家，给自己的讲书视频配 AI 男声。' },
+                    { t: '爬虫', s: 2, d: 'boss-zhipin-collector：连找工作都用爬虫做情报。' },
+                    { t: '服务器运维', s: 1, d: 'ssh + pm2 + nginx，一台服务器跑着一整个产品矩阵。' },
+                    { t: '知识管理', s: 1, d: 'Obsidian 双库驱动，flomo 236 条笔记沉淀。' },
+                ]
+            },
+            {
+                key: 'work', name: '身份事业', color: '#96692f',
+                desc: '24 岁，处于「能力探索 → 商业收敛」的过渡期：讲课、造产品、写内容，三线并行。',
+                tags: [
+                    { t: '独立开发者', s: 3, d: '2026-09 最新自我定位：自由度极高，靠自驱闭环对抗熵增。' },
+                    { t: 'AI 原生 Builder', s: 3, d: '用 AI 造 AI 产品，工作流里没有 AI 就不自在。' },
+                    { t: 'AI 讲师', s: 3, d: '面向中国职场用户教 AI 技能，月均 3000 元，目标两年内 1 万/月。' },
+                    { t: '内容创作者', s: 2, d: '自媒体矩阵：公众号、讲书视频、国漫解说多线开工。' },
+                    { t: '求职锚点：FDE', s: 2, d: '前线部署工程师 / AI 落地负责人，自评可拿下 30-50 万年薪的蓄水池。' },
+                    { t: '华农电信毕业', s: 1, d: '华南农业大学电子信息工程 2023 届。' },
+                    { t: '大湾区青年', s: 1, d: '阳江人在广州长大，深圳打拼、双城规划：「要务实去广州，要赚钱去上海。」' },
+                    { t: '妈妈的 AI 顾问', s: 2, d: '用 AI 给家里人的艾灸养生店做客服话术、推广和定价海报。' },
+                ]
+            },
+            {
+                key: 'val', name: '价值观', color: '#3f6b52',
+                desc: '十级排序里「自我成长」稳居第一。极简版三条：提高认知、家庭融洽、助人为乐。',
+                tags: [
+                    { t: '成长 > 成功', s: 3, d: '价值观排序第一名：自我成长与学习。' },
+                    { t: '真实', s: 3, d: '真实比完美重要——坦诚面对自己的优缺点。' },
+                    { t: '家庭第一', s: 3, d: '独自为五口之家制定了 5-8 年规划，长兄如父。' },
+                    { t: '助人为乐', s: 2, d: '极简价值观第三条：做帮助人的产品。' },
+                    { t: '长期主义', s: 2, d: '愿意先做一年免费内容，再谈商业化。' },
+                    { t: '效率方法论', s: 2, d: '坚信方法比努力重要，工具是能力的放大器。' },
+                    { t: '自由', s: 2, d: '人生目标里写着：不用为钱工作。' },
+                ]
+            },
+            {
+                key: 'goal', name: '目标愿景', color: '#6d3a5d',
+                desc: '北极星：30 岁（2032 年）前存到 200 万，置信度自评 5/5。路径已拆到季度。',
+                tags: [
+                    { t: '30 岁存 200 万', s: 3, d: '北极星目标：2 年存 30 万 → 4 年 130-150 万 → 6 年 280-380 万。' },
+                    { t: '18 个月 18 个产品', s: 2, d: 'vibecoding 月更计划，用作品密度换可能性。' },
+                    { t: '公众号 10 万粉', s: 2, d: '周更 2-3 篇，从 0 粉起步的长期主义实验。' },
+                    { t: '全家广州有房有车', s: 2, d: '26 岁买 15 万的车，28 岁番禺 200 万的三房。' },
+                    { t: '自由创造者生活', s: 3, d: '终极范式：不打卡，不内卷，为自己造的东西负责。' },
+                ]
+            },
+            {
+                key: 'life', name: '生活万象', color: '#6a5a4a',
+                desc: '量化生活实验者、桌面即宇宙的项目囤积症选手、全家人的 CFO。',
+                tags: [
+                    { t: '量化生活', s: 2, d: '2700 大卡/天 + 日均 30 元餐标 + 每周运动 3 次，全部有表格。' },
+                    { t: '全家 CFO', s: 2, d: '给爸妈妹妹做全家开支表格和十年财务规划，记账精确到每笔。' },
+                    { t: '桌面即宇宙', s: 2, d: '20+ 并行项目，还写了 desktop_radar.py 自动监控它们。' },
+                    { t: '工具多开党', s: 2, d: 'Claude Code、GPT Codex、Gemini CLI 三修玩家。' },
+                    { t: '语音笔记狂魔', s: 2, d: '说话转文字、文字喂 AI 总结，睡不着就看笔记。' },
+                    { t: '消费准则哲学家', s: 1, d: '一天收入吃大餐、一周收入买手机、一年收入买车、十年收入买房。' },
+                    { t: '二手数码快乐星人', s: 1, d: '「电子产品都想买二手，99 新几乎没怎么用过。」' },
+                ]
+            },
+        ]
+    };
+
+    /* =====================================================
+       平面标签云 + 图例（无 JS 依赖的数据渲染）
+    ===================================================== */
+    (function renderCloud() {
+        const cloud = document.getElementById('cloudBody');
+        const legend = document.getElementById('legend');
+        let total = 0;
+        PROFILE.dims.forEach(dim => {
+            total += dim.tags.length;
+
+            const block = document.createElement('div');
+            block.className = 'dim-block';
+            block.innerHTML =
+                '<div class="db-head">' +
+                    '<span class="dot" style="background:' + dim.color + '"></span>' +
+                    '<h3>' + dim.name + '</h3>' +
+                    '<span class="db-count">' + dim.tags.length + ' TAGS</span>' +
+                '</div>';
+            const chips = document.createElement('div');
+            chips.className = 'chips';
+            dim.tags.forEach(tag => {
+                const c = document.createElement('span');
+                c.className = 'chip' + (tag.s === 3 ? ' big' : tag.s === 2 ? ' mid' : '');
+                c.textContent = tag.t;
+                c.title = tag.d;
+                chips.appendChild(c);
+            });
+            block.appendChild(chips);
+            cloud.appendChild(block);
+
+            const chip = document.createElement('div');
+            chip.className = 'legend-chip';
+            chip.dataset.key = dim.key;
+            chip.innerHTML = '<span class="dot" style="background:' + dim.color + '"></span>' + dim.name;
+            legend.appendChild(chip);
+        });
+        const tc = document.getElementById('tagCount');
+        if (tc) tc.textContent = total;
+    })();
+
+    /* =====================================================
+       3D 宣纸星图
+    ===================================================== */
+    (function initGalaxy() {
+        const canvas = document.getElementById('galaxy');
+        if (!window.THREE) { canvas.classList.remove('loading'); return; }
+
+        const PAPER = '#f3ede2', INK = '#1c1510', VERMILION = '#ba3f14';
+        const DPR = Math.min(window.devicePixelRatio || 1, 2);
+        let W = canvas.clientWidth, H = canvas.clientHeight;
+
+        let renderer;
+        try {
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        } catch (e) {
+            canvas.classList.remove('loading');
+            canvas.style.display = 'none';
+            return;
+        }
+        renderer.setPixelRatio(DPR);
+        renderer.setSize(W, H, false);
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0xf3ede2, 60, 125);
+
+        const camera = new THREE.PerspectiveCamera(46, W / H, 0.1, 300);
+        camera.position.set(0, 15, 60);
+        // 窄屏（竖屏）时按可视宽度自适应拉远：默认姿态下左右星团不出画；雾程同步平移
+        function fitCameraZ() {
+            const need = 28.5 / (Math.tan(camera.fov * Math.PI / 360) * camera.aspect);
+            camera.position.z = Math.max(60, need);
+            scene.fog.near = camera.position.z;
+            scene.fog.far = camera.position.z + 65;
+        }
+        fitCameraZ();
+
+        const world = new THREE.Group();
+        scene.add(world);
+
+        /* ---------- 文字贴图 ---------- */
+        function makeTextTexture(text, color, weight, px) {
+            px = px || 56;
+            const c = document.createElement('canvas');
+            const ctx = c.getContext('2d');
+            const font = weight + ' ' + px + 'px "Noto Serif SC", serif';
+            ctx.font = font;
+            const tw = Math.ceil(ctx.measureText(text).width);
+            const padX = Math.ceil(px * 0.6), padY = Math.ceil(px * 0.75);
+            c.width = tw + padX * 2;
+            c.height = px + padY * 2;
+            const g = c.getContext('2d');
+            g.font = font;
+            g.textAlign = 'center';
+            g.textBaseline = 'middle';
+            g.fillStyle = color;
+            g.fillText(text, c.width / 2, c.height / 2 + px * 0.04);
+            const tex = new THREE.CanvasTexture(c);
+            tex.minFilter = THREE.LinearFilter;
+            return { tex: tex, aspect: c.width / c.height };
+        }
+
+        function makeDotTexture(color, r) {
+            const c = document.createElement('canvas');
+            c.width = c.height = 64;
+            const g = c.getContext('2d');
+            const grad = g.createRadialGradient(32, 32, 2, 32, 32, 30);
+            grad.addColorStop(0, color);
+            grad.addColorStop(0.45, color);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            g.fillStyle = grad;
+            g.beginPath(); g.arc(32, 32, 30, 0, Math.PI * 2); g.fill();
+            const tex = new THREE.CanvasTexture(c);
+            return tex;
+        }
+
+        function makeRing(radius, color, opacity) {
+            const pts = [];
+            const N = 128;
+            for (let i = 0; i <= N; i++) {
+                const a = i / N * Math.PI * 2;
+                pts.push(new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius));
+            }
+            const geo = new THREE.BufferGeometry().setFromPoints(pts);
+            const mat = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity });
+            return new THREE.Line(geo, mat);
+        }
+
+        /* ---------- 背景星尘 ---------- */
+        (function stars() {
+            const n = 700, pos = new Float32Array(n * 3);
+            for (let i = 0; i < n; i++) {
+                const r = 34 + Math.random() * 46;
+                const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+                pos[i * 3] = r * Math.sin(ph) * Math.cos(th);
+                pos[i * 3 + 1] = r * Math.cos(ph) * 0.6;
+                pos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+            }
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({
+                color: 0x9a8a74, size: 0.55, transparent: true, opacity: 0.5,
+                map: makeDotTexture('#9a8a74', 30), depthWrite: false
+            });
+            world.add(new THREE.Points(geo, mat));
+        })();
+
+        /* ---------- 浑天仪环 ---------- */
+        const rings = new THREE.Group();
+        const ring1 = makeRing(30.5, 0xba3f14, 0.30); ring1.rotation.x = Math.PI / 2.25;
+        const ring2 = makeRing(33.5, 0xb8a898, 0.45); ring2.rotation.x = Math.PI / 2.25; ring2.rotation.z = 0.28;
+        const ring3 = makeRing(36.2, 0xd8d0c2, 0.7); ring3.rotation.x = Math.PI / 1.75; ring3.rotation.y = 0.5;
+        rings.add(ring1, ring2, ring3);
+        world.add(rings);
+
+        /* ---------- 中心：Mark ---------- */
+        const coreGroup = new THREE.Group();
+        const coreDot = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: makeDotTexture(VERMILION, 30), transparent: true, opacity: 0.95, depthWrite: false
+        }));
+        coreDot.scale.set(4.4, 4.4, 1);
+        coreGroup.add(coreDot);
+        const coreHalo = makeRing(2.6, 0xba3f14, 0.55);
+        const coreHalo2 = makeRing(3.6, 0xba3f14, 0.25);
+        coreHalo.rotation.x = Math.PI / 2.6; coreHalo2.rotation.x = Math.PI / 2.6; coreHalo2.rotation.z = 0.4;
+        coreGroup.add(coreHalo, coreHalo2);
+        const coreTex = makeTextTexture(PROFILE.center.name, VERMILION, '900', 96);
+        const coreLabel = new THREE.Sprite(new THREE.SpriteMaterial({ map: coreTex.tex, transparent: true, depthWrite: false }));
+        coreLabel.scale.set(6 * coreTex.aspect, 6, 1);
+        coreLabel.position.set(0, 3.4, 0);
+        coreGroup.add(coreLabel);
+        const subTex = makeTextTexture(PROFILE.center.sub, '#6a5a4a', '500', 44);
+        const subLabel = new THREE.Sprite(new THREE.SpriteMaterial({ map: subTex.tex, transparent: true, opacity: 0.9, depthWrite: false }));
+        const subW = Math.min(2.4 * subTex.aspect, 15); // 限宽，防止横跨压到两侧星团标签
+        subLabel.scale.set(subW, subW / subTex.aspect, 1);
+        subLabel.position.set(0, -3.6, 0);
+        if (W / H < 1) subLabel.position.y = -2.2; // 竖屏：副标题上提贴近主名，避让前排星团的维度名
+        coreGroup.add(subLabel);
+        world.add(coreGroup);
+
+        /* ---------- 维度星团 ---------- */
+        const dimNodes = [];   // { dim, core, tags:[{sprite, mesh?}], lines }
+        const pickables = [];
+
+        function fibonacci(i, n) {
+            const phi = Math.acos(1 - 2 * (i + 0.5) / n);
+            const phiEq = Math.PI / 2 + (phi - Math.PI / 2) * 0.72; // 压向赤道带，上下留白均衡、星团彼此更散
+            const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
+            return new THREE.Vector3(
+                Math.sin(phiEq) * Math.cos(theta),
+                Math.cos(phiEq),
+                Math.sin(phiEq) * Math.sin(theta)
+            );
+        }
+
+        const hoverTexCache = new Map();
+        function vermilionTexFor(tag) {
+            if (!hoverTexCache.has(tag.t)) {
+                const m = makeTextTexture(tag.t, VERMILION, '700', 56);
+                hoverTexCache.set(tag.t, { map: m.tex, aspect: m.aspect, oldScale: null });
+            }
+            return hoverTexCache.get(tag.t);
+        }
+
+        PROFILE.dims.forEach(function (dim, di) {
+            const dir = fibonacci(di, PROFILE.dims.length);
+            const R = 18.5 + (di % 2) * 3.4;
+            const center = dir.multiplyScalar(R);
+            const group = new THREE.Group();
+            group.position.copy(center);
+
+            // 星团核心
+            const core = new THREE.Sprite(new THREE.SpriteMaterial({
+                map: makeDotTexture(dim.color, 30), transparent: true, depthWrite: false
+            }));
+            core.scale.set(3.4, 3.4, 1);
+            core.userData = { type: 'dim', dim: dim };
+            group.add(core);
+            pickables.push(core);
+
+            const nameTex = makeTextTexture(dim.name, dim.color, '900', 72);
+            const nameSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: nameTex.tex, transparent: true, depthWrite: false }));
+            nameSprite.scale.set(2.2 * nameTex.aspect, 2.2, 1);
+            nameSprite.position.set(0, 6.0, 0); // 抬到标签带上方，避免与星团标签互压
+            nameSprite.userData = { type: 'dim', dim: dim, bw: 2.2 * nameTex.aspect, bh: 2.2 };
+            group.add(nameSprite);
+            pickables.push(nameSprite);
+
+            // 标签星点：球带螺旋分布（黄金角，避开极点，3D 均匀防重叠）
+            const linePts = [];
+            const tagEntries = [];
+            const GA = Math.PI * (1 + Math.sqrt(5));
+            dim.tags.forEach(function (tag, ti) {
+                const n = dim.tags.length;
+                const phi = (38 + 104 * ((ti + 0.5) / n)) * Math.PI / 180;
+                const theta = GA * (ti + 0.5) + di * 1.9;
+                const rr = tag.s === 3 ? 4.8 : tag.s === 2 ? 6.4 : 8.0;
+                const p = new THREE.Vector3(
+                    Math.sin(phi) * Math.cos(theta) * rr,
+                    Math.cos(phi) * rr * 0.82,
+                    Math.sin(phi) * Math.sin(theta) * rr
+                );
+
+                const baseTex = makeTextTexture(tag.t, INK, '600', 56);
+                const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+                    map: baseTex.tex, transparent: true, depthWrite: false
+                }));
+                const h0 = tag.s === 3 ? 1.95 : tag.s === 2 ? 1.55 : 1.28;
+                const h = Math.min(h0, 6.6 / baseTex.aspect); // 宽标签自动缩高，防跨星团遮挡
+                sp.scale.set(h * baseTex.aspect, h, 1);
+                sp.position.copy(p);
+                sp.userData = { type: 'tag', dim: dim, tag: tag, baseH: h, baseAspect: baseTex.aspect, baseMap: baseTex.tex };
+                group.add(sp);
+                pickables.push(sp);
+                tagEntries.push({ sprite: sp, tag: tag, phi: phi, theta: theta, rr: rr });
+
+                linePts.push(new THREE.Vector3(0, 0, 0), p.clone().multiplyScalar(0.86));
+            });
+            const lineGeo = new THREE.BufferGeometry().setFromPoints(linePts);
+            const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+                color: new THREE.Color(dim.color), transparent: true, opacity: 0.16
+            }));
+            group.add(lines);
+
+            world.add(group);
+            dimNodes.push({ dim: dim, group: group, tagEntries: tagEntries, core: core, nameSprite: nameSprite, lines: lines });
+        });
+
+        /* ---------- 标签防叠：初始视角附近的屏幕空间松弛（多姿态） ---------- */
+        (function relaxLabels() {
+            camera.lookAt(0, 0, 0);
+            camera.updateMatrixWorld(true);
+
+            const cw = canvas.clientWidth || 1, ch = canvas.clientHeight || 1;
+            const camRight = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
+            const camUp = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+
+            function projPx(v) {
+                const q = v.clone().project(camera);
+                return { x: (q.x + 1) / 2 * cw, y: (1 - q.y) / 2 * ch };
+            }
+
+            // 覆盖初始姿态 ±17°，自动旋转的头几秒也保持清爽
+            const POSES = [0, 0.3, -0.3];
+            const nodeMats = new Map();
+            const coreWP = []; // 各姿态下中心 Mark / 副标题的世界坐标
+            POSES.forEach(function (yk) {
+                world.rotation.set(0.18, yk, 0);
+                scene.updateMatrixWorld(true);
+                dimNodes.forEach(function (nd) {
+                    if (!nodeMats.has(nd)) nodeMats.set(nd, []);
+                    nodeMats.get(nd).push(nd.group.matrixWorld.clone());
+                });
+                coreWP.push([
+                    coreLabel.getWorldPosition(new THREE.Vector3()),
+                    subLabel.getWorldPosition(new THREE.Vector3())
+                ]);
+            });
+
+            // 共享求解器：屏幕空间矩形推挤 + 数值雅可比（标签 θ/φ/径向三自由度；维度名局部平移；最小范数步）
+            function posOf(it, pk, dTheta, dPhi, dR) {
+                if (it.fixed) return it.wp[pk].clone();
+                if (it.name) return new THREE.Vector3(it.x + (dTheta || 0), it.y + (dPhi || 0), it.z + (dR || 0)).applyMatrix4(it.Ms[pk]);
+                const th = it.theta + (dTheta || 0), ph = it.phi + (dPhi || 0), rr = it.rr + (dR || 0);
+                return new THREE.Vector3(
+                    Math.sin(ph) * Math.cos(th) * rr,
+                    Math.cos(ph) * rr * 0.82,
+                    Math.sin(ph) * Math.sin(th) * rr
+                ).applyMatrix4(it.Ms[pk]);
+            }
+
+            function runIters(list, poseIdx, iters, pad) {
+                if (pad === undefined) pad = 3;
+                for (let iter = 0; iter < iters; iter++) {
+                    const push = list.map(function () { return { x: 0, y: 0 }; });
+                    let any = false;
+                    poseIdx.forEach(function (pk) {
+                        const wt = poseIdx.length > 1 && pk === 0 ? 2 : 1;
+                        const boxes = list.map(function (it) {
+                            const wp = posOf(it, pk);
+                            const c = projPx(wp);
+                            const ex = projPx(wp.clone().addScaledVector(camRight, it.w / 2));
+                            const ey = projPx(wp.clone().addScaledVector(camUp, it.h / 2));
+                            return { c: c, hw: Math.abs(ex.x - c.x) + pad, hh: Math.abs(ey.y - c.y) + pad };
+                        });
+                        for (let i = 0; i < list.length; i++) {
+                            for (let j = i + 1; j < list.length; j++) {
+                                const dx = boxes[j].c.x - boxes[i].c.x, dy = boxes[j].c.y - boxes[i].c.y;
+                                const ox = boxes[i].hw + boxes[j].hw - Math.abs(dx);
+                                const oy = boxes[i].hh + boxes[j].hh - Math.abs(dy);
+                                if (ox <= 0 || oy <= 0) continue;
+                                const fi = list[i].fixed, fj = list[j].fixed;
+                                if (fi && fj) continue;
+                                any = true;
+                                if (ox / (boxes[i].hw + boxes[j].hw) <= oy / (boxes[i].hh + boxes[j].hh)) {
+                                    const s = (dx >= 0 ? 1 : -1) * ox * 0.5;
+                                    if (!fi) push[i].x -= s * (fj ? 1 : 0.5) * wt;
+                                    if (!fj) push[j].x += s * (fi ? 1 : 0.5) * wt;
+                                } else {
+                                    const s = (dy >= 0 ? 1 : -1) * oy * 0.5;
+                                    if (!fi) push[i].y -= s * (fj ? 1 : 0.5) * wt;
+                                    if (!fj) push[j].y += s * (fi ? 1 : 0.5) * wt;
+                                }
+                            }
+                        }
+                        // 画布边缘斥力：标签不许被推出画面（墙内 4px 保护带）
+                        const M = 4;
+                        boxes.forEach(function (b, k) {
+                            const it = list[k];
+                            if (it.fixed) return;
+                            let fx = 0, fy = 0;
+                            if (b.c.x - b.hw < M) fx += M - (b.c.x - b.hw);
+                            if (b.c.x + b.hw > cw - M) fx -= b.c.x + b.hw - (cw - M);
+                            if (b.c.y - b.hh < M) fy += M - (b.c.y - b.hh);
+                            if (b.c.y + b.hh > ch - M) fy -= b.c.y + b.hh - (ch - M);
+                            if (fx || fy) { push[k].x += fx * wt; push[k].y += fy * wt; any = true; }
+                        });
+                    });
+                    if (!any) break;
+                    const eps = 0.02;
+                    list.forEach(function (it, k) {
+                        const P = push[k];
+                        if (it.fixed || (!P.x && !P.y)) return;
+                        const c0 = projPx(posOf(it, 0));
+                        const cT = projPx(posOf(it, 0, eps, 0));
+                        const cP = projPx(posOf(it, 0, 0, eps));
+                        const cR = projPx(posOf(it, 0, 0, 0, eps));
+                        const a11 = cT.x - c0.x, a21 = cT.y - c0.y;
+                        const a12 = cP.x - c0.x, a22 = cP.y - c0.y;
+                        const a13 = cR.x - c0.x, a23 = cR.y - c0.y;
+                        const m11 = a11 * a11 + a12 * a12 + a13 * a13;
+                        const m12 = a11 * a21 + a12 * a22 + a13 * a23;
+                        const m22 = a21 * a21 + a22 * a22 + a23 * a23;
+                        const det = m11 * m22 - m12 * m12;
+                        if (Math.abs(det) < 1e-6) return;
+                        const u = (m22 * P.x - m12 * P.y) / det;
+                        const v = (m11 * P.y - m12 * P.x) / det;
+                        const cl = it.cl || [0.1, 0.1, 0.3];
+                        const d1 = Math.max(-cl[0], Math.min(cl[0], a11 * u + a21 * v));
+                        const d2 = Math.max(-cl[1], Math.min(cl[1], a12 * u + a22 * v));
+                        const d3 = Math.max(-cl[2], Math.min(cl[2], a13 * u + a23 * v));
+                        if (it.name) { // 维度名：星团上方小范围平移，保证与副标题等固定件有解
+                            it.x = Math.max(-4.2, Math.min(4.2, it.x + d1));
+                            it.y = Math.max(4.4, Math.min(7.8, it.y + d2));
+                            it.z = Math.max(-4.2, Math.min(4.2, it.z + d3));
+                        } else {
+                            it.theta += d1;
+                            it.phi = Math.max(0.5, Math.min(2.65, it.phi + d2));
+                            it.rr = Math.max(it.rr0 * 0.92, Math.min(it.rr0 * 1.6, it.rr + d3));
+                        }
+                    });
+                }
+            }
+
+            const allItems = [];
+            dimNodes.forEach(function (node) {
+                const Ms = nodeMats.get(node);
+                const items = node.tagEntries.map(function (e) {
+                    return { phi: e.phi, theta: e.theta, rr: e.rr, rr0: e.rr, Ms: Ms,
+                        w: e.sprite.scale.x, h: e.sprite.scale.y };
+                });
+                // 维度名：可移动项（小范围平移）——否则与中心副标题这类固定件叠压时无解
+                items.push({ name: true, x: 0, y: 6.0, z: 0, Ms: Ms, cl: [0.25, 0.28, 0.25],
+                    w: node.nameSprite.scale.x, h: node.nameSprite.scale.y });
+                items.push({ fixed: true, wp: coreWP.map(function (a) { return a[0].clone(); }),
+                    w: coreLabel.scale.x, h: coreLabel.scale.y });
+                items.push({ fixed: true, wp: coreWP.map(function (a) { return a[1].clone(); }),
+                    w: subLabel.scale.x, h: subLabel.scale.y });
+
+                // 两阶段：多姿态铺开（旋转窗口内大致清爽）→ 初始姿态精修
+                runIters(items, POSES.map(function (yk, pk) { return pk; }), 40);
+                runIters(items, [0], 30);
+                node.relaxItems = items;
+                allItems.push.apply(allItems, items);
+            });
+
+            // 跨团全局精修与团内回补交替：处理相邻星团间的叠压；padding 逐轮退火，终态以真实矩形为准
+            for (let round = 0; round < 5; round++) {
+                const pad = Math.max(0, 3 - round);
+                runIters(allItems, [0], 50, pad);
+                dimNodes.forEach(function (node) { runIters(node.relaxItems, [0], 15, pad); });
+            }
+
+            // 写回位置并重建连线
+            dimNodes.forEach(function (node) {
+                const items = node.relaxItems, pts = [];
+                const nameIt = items[node.tagEntries.length]; // 维度名紧跟在标签项之后
+                node.nameSprite.position.set(nameIt.x, nameIt.y, nameIt.z);
+                node.tagEntries.forEach(function (e, k) {
+                    const it = items[k];
+                    e.sprite.position.set(
+                        Math.sin(it.phi) * Math.cos(it.theta) * it.rr,
+                        Math.cos(it.phi) * it.rr * 0.82,
+                        Math.sin(it.phi) * Math.sin(it.theta) * it.rr
+                    );
+                    pts.push(new THREE.Vector3(0, 0, 0), e.sprite.position.clone().multiplyScalar(0.86));
+                });
+                node.lines.geometry.setFromPoints(pts);
+            });
+
+            // 自检：初始姿态下仍互相重叠的标签对（0 = 松弛收敛，console 可查）
+            world.rotation.set(0.18, 0, 0);
+            scene.updateMatrixWorld(true);
+            const checkSprites = [{ s: coreLabel, n: 'Mark' }, { s: subLabel, n: '副标题' }];
+            dimNodes.forEach(function (node) {
+                checkSprites.push({ s: node.nameSprite, n: node.dim.name + '·维度名' });
+                node.tagEntries.forEach(function (e) { checkSprites.push({ s: e.sprite, n: e.tag.t }); });
+            });
+            const cboxes = checkSprites.map(function (o) {
+                const wp = o.s.getWorldPosition(new THREE.Vector3());
+                const c = projPx(wp);
+                const ex = projPx(wp.clone().addScaledVector(camRight, o.s.scale.x / 2));
+                const ey = projPx(wp.clone().addScaledVector(camUp, o.s.scale.y / 2));
+                return { c: c, hw: Math.abs(ex.x - c.x), hh: Math.abs(ey.y - c.y), n: o.n };
+            });
+            let residual = 0;
+            for (let i = 0; i < cboxes.length; i++)
+                for (let j = i + 1; j < cboxes.length; j++) {
+                    if (Math.abs(cboxes[j].c.x - cboxes[i].c.x) < cboxes[i].hw + cboxes[j].hw &&
+                        Math.abs(cboxes[j].c.y - cboxes[i].c.y) < cboxes[i].hh + cboxes[j].hh) {
+                        residual++;
+                        if (residual <= 8) {
+                            const bi = cboxes[i], bj = cboxes[j];
+                            console.log('[relax] 叠压: ' + bi.n + ' @(' + Math.round(bi.c.x) + ',' + Math.round(bi.c.y) +
+                                ') ' + Math.round(bi.hw * 2) + 'x' + Math.round(bi.hh * 2) +
+                                ' × ' + bj.n + ' @(' + Math.round(bj.c.x) + ',' + Math.round(bj.c.y) +
+                                ') ' + Math.round(bj.hw * 2) + 'x' + Math.round(bj.hh * 2));
+                        }
+                    }
+                }
+            console.log('[relax] 残余重叠总计: ' + residual + ' 对');
+            // 越界自检：标签是否贴出画布边缘
+            let outside = 0;
+            cboxes.forEach(function (b) {
+                if (b.c.x - b.hw < 0 || b.c.x + b.hw > cw || b.c.y - b.hh < 0 || b.c.y + b.hh > ch) {
+                    outside++;
+                    if (outside <= 5) console.log('[relax] 越界: ' + b.n + ' @(' + Math.round(b.c.x) + ',' + Math.round(b.c.y) + ')');
+                }
+            });
+
+            world.rotation.set(0, 0, 0); // 交回动画循环从初始姿态缓动进入
+        })();
+
+        /* ---------- 聚焦状态 ---------- */
+        let focusKey = null;
+        let hoverObj = null;
+        const targets = new Map(); // object -> target opacity
+
+        function setFocus(key) {
+            focusKey = (focusKey === key) ? null : key;
+            document.querySelectorAll('.legend-chip').forEach(function (c) {
+                c.classList.toggle('active', c.dataset.key === focusKey);
+            });
+            if (focusKey) openPanel(focusKey); else closePanel();
+        }
+
+        function updateTargets() {
+            dimNodes.forEach(function (node) {
+                const active = !focusKey || node.dim.key === focusKey;
+                const o = active ? 1 : 0.10;
+                node.tagEntries.forEach(function (e) { targets.set(e.sprite.material, o); });
+                targets.set(node.core.material, active ? 1 : 0.10);
+                targets.set(node.nameSprite.material, active ? 1 : 0.06);
+                node.lines.material.opacity = active ? 0.16 : 0.03;
+            });
+        }
+        updateTargets();
+
+        /* ---------- 详情面板 ---------- */
+        const panel = document.getElementById('panel');
+        function openPanel(key) {
+            const dim = PROFILE.dims.find(function (d) { return d.key === key; });
+            if (!dim) return;
+            document.getElementById('pKicker').textContent = 'DIMENSION · ' + key.toUpperCase();
+            document.getElementById('pKicker').style.color = dim.color;
+            document.getElementById('pName').textContent = dim.name;
+            document.getElementById('pCount').textContent = dim.tags.length + ' 个标签 · ' +
+                (dim.tags.filter(function (t) { return t.s === 3; }).length) + ' 个高分量';
+            const pDesc = document.getElementById('pDesc');
+            pDesc.textContent = dim.desc;
+            pDesc.style.borderColor = dim.color;
+            const box = document.getElementById('pTags');
+            box.innerHTML = '';
+            dim.tags.forEach(function (tag) {
+                const div = document.createElement('div');
+                div.className = 'p-tag';
+                div.innerHTML =
+                    '<div class="pt-head"><span class="pt-name" style="color:' + dim.color + '">' + tag.t + '</span>' +
+                    '<span class="pt-heat" style="color:' + dim.color + '">' + ('●'.repeat(tag.s)) + '</span></div>' +
+                    '<div class="pt-desc">' + tag.d + '</div>';
+                box.appendChild(div);
+            });
+            panel.classList.add('open');
+        }
+        function closePanel() { panel.classList.remove('open'); }
+        document.getElementById('panelClose').addEventListener('click', function () { setFocus(focusKey); });
+
+        /* ---------- 图例 ---------- */
+        document.querySelectorAll('.legend-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () { setFocus(chip.dataset.key); });
+        });
+
+        /* ---------- 悬停气泡 ---------- */
+        const tip = document.getElementById('tip');
+        function showTip(obj, x, y) {
+            const u = obj.userData;
+            if (u.type === 'tag') {
+                document.getElementById('tipName').textContent = u.tag.t;
+                document.getElementById('tipDim').textContent = u.dim.name.toUpperCase();
+                document.getElementById('tipDim').style.color = u.dim.color;
+                document.getElementById('tipDesc').textContent = u.tag.d;
+            } else {
+                document.getElementById('tipName').textContent = u.dim.name;
+                document.getElementById('tipDim').textContent = 'DIMENSION';
+                document.getElementById('tipDim').style.color = u.dim.color;
+                document.getElementById('tipDesc').textContent = u.dim.desc;
+            }
+            tip.style.opacity = 1;
+            moveTip(x, y);
+        }
+        function moveTip(x, y) {
+            const pad = 16;
+            let tx = x + pad, ty = y + pad;
+            if (tx + 300 > window.innerWidth) tx = x - 300 - pad;
+            if (ty + 140 > window.innerHeight) ty = y - 140 - pad;
+            tip.style.left = tx + 'px';
+            tip.style.top = ty + 'px';
+        }
+        function hideTip() { tip.style.opacity = 0; }
+
+        /* ---------- 交互：拖拽 / 缩放 / 拾取 ---------- */
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+        let dragging = false, moved = 0;
+        let px = 0, py = 0;
+        let velX = 0, velY = 0;
+        let targetRotX = 0.18, targetRotY = 0;
+        let autoRotate = true;
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) autoRotate = false;
+
+        function updatePointer(e) {
+            const rect = canvas.getBoundingClientRect();
+            pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        }
+
+        function pick(e) {
+            updatePointer(e);
+            raycaster.setFromCamera(pointer, camera);
+            const hits = raycaster.intersectObjects(pickables, false);
+            return hits.length ? hits[0].object : null;
+        }
+
+        function onDown(x, y) { dragging = true; moved = 0; px = x; py = y; canvas.classList.add('dragging'); }
+        function onMove(x, y, e) {
+            if (dragging) {
+                const dx = x - px, dy = y - py;
+                moved += Math.abs(dx) + Math.abs(dy);
+                targetRotY += dx * 0.0045;
+                targetRotX = Math.max(-1.25, Math.min(1.25, targetRotX + dy * 0.0038));
+                velY = dx * 0.0045; velX = dy * 0.0038;
+                px = x; py = y;
+                hideTip();
+            } else if (e) {
+                const obj = pick(e);
+                if (obj !== hoverObj) {
+                    if (hoverObj && hoverObj.userData.type === 'tag') {
+                        const m = hoverObj.material;
+                        m.map = hoverObj.userData.baseMap;
+                        hoverObj.scale.set(hoverObj.userData.baseH * hoverObj.userData.baseAspect, hoverObj.userData.baseH, 1);
+                    } else if (hoverObj && hoverObj.userData.bw) {
+                        hoverObj.scale.set(hoverObj.userData.bw, hoverObj.userData.bh, 1); // 还原维度名原始宽高比
+                    }
+                    hoverObj = obj;
+                    if (hoverObj) {
+                        canvas.style.cursor = 'pointer';
+                        if (hoverObj.userData.type === 'tag') {
+                            const v = vermilionTexFor(hoverObj.userData.tag);
+                            hoverObj.material.map = v.map;
+                            const k = 1.18;
+                            hoverObj.scale.set(hoverObj.userData.baseH * k * hoverObj.userData.baseAspect, hoverObj.userData.baseH * k, 1);
+                        } else if (hoverObj.userData.bw) {
+                            hoverObj.scale.set(hoverObj.userData.bw * 1.15, hoverObj.userData.bh * 1.15, 1); // 维度名按比例放大
+                        } else {
+                            hoverObj.scale.set(4.3, 4.3, 1);
+                        }
+                        showTip(hoverObj, e.clientX, e.clientY);
+                    } else {
+                        canvas.style.cursor = 'grab';
+                        hideTip();
+                    }
+                } else if (hoverObj) {
+                    moveTip(e.clientX, e.clientY);
+                }
+            }
+        }
+        function onUp(x, y, e) {
+            canvas.classList.remove('dragging');
+            if (dragging && moved < 6) {
+                const obj = pick(e || { clientX: x, clientY: y });
+                if (obj) {
+                    setFocus(obj.userData.dim.key);
+                    updateTargets();
+                } else if (focusKey) {
+                    setFocus(focusKey);
+                    updateTargets();
+                }
+            }
+            dragging = false;
+        }
+
+        canvas.addEventListener('mousedown', function (e) { onDown(e.clientX, e.clientY); });
+        window.addEventListener('mousemove', function (e) {
+            const r = canvas.getBoundingClientRect();
+            const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+            if (inside || dragging) onMove(e.clientX, e.clientY, e);
+        });
+        window.addEventListener('mouseup', function (e) { if (dragging) onUp(e.clientX, e.clientY, e); });
+
+        canvas.addEventListener('wheel', function (e) {
+            e.preventDefault();
+            const z = camera.position.z * (1 + Math.sign(e.deltaY) * 0.08);
+            camera.position.z = Math.max(18, Math.min(95, z));
+        }, { passive: false });
+
+        // 触摸
+        let pinchD = 0;
+        canvas.addEventListener('touchstart', function (e) {
+            if (e.touches.length === 1) onDown(e.touches[0].clientX, e.touches[0].clientY);
+            else if (e.touches.length === 2) {
+                pinchD = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY);
+            }
+        }, { passive: true });
+        canvas.addEventListener('touchmove', function (e) {
+            if (e.touches.length === 1) {
+                e.preventDefault();
+                onMove(e.touches[0].clientX, e.touches[0].clientY, null);
+            } else if (e.touches.length === 2) {
+                e.preventDefault();
+                const d = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY);
+                camera.position.z = Math.max(18, Math.min(95, camera.position.z * (pinchD / d)));
+                pinchD = d;
+            }
+        }, { passive: false });
+        canvas.addEventListener('touchend', function (e) {
+            if (e.changedTouches.length) onUp(e.changedTouches[0].clientX, e.changedTouches[0].clientY, null);
+        });
+
+        // 按钮
+        document.getElementById('btnRotate').addEventListener('click', function () {
+            autoRotate = !autoRotate;
+            this.innerHTML = autoRotate
+                ? '<svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg> 旋转'
+                : '<svg class="ti" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg> 旋转';
+        });
+        document.getElementById('btnReset').addEventListener('click', function () {
+            targetRotX = 0.18; targetRotY = 0; camera.position.z = 60;
+            if (focusKey) { setFocus(focusKey); updateTargets(); }
+        });
+
+        /* ---------- resize ---------- */
+        function onResize() {
+            W = canvas.clientWidth; H = canvas.clientHeight;
+            renderer.setSize(W, H, false);
+            camera.aspect = W / H;
+            fitCameraZ(); // 横竖屏切换后重新取景（覆盖手动缩放，可接受）
+            camera.updateProjectionMatrix();
+        }
+        window.addEventListener('resize', onResize);
+
+        /* ---------- 动画循环 ---------- */
+        let last = performance.now();
+        function animate(now) {
+            requestAnimationFrame(animate);
+            const dt = Math.min((now - last) / 1000, 0.05);
+            last = now;
+
+            if (autoRotate && !dragging) targetRotY += dt * 0.05;
+
+            camera.lookAt(0, 0, 0); // 缩放后仍对准原点，保证构图居中
+
+            world.rotation.y += (targetRotY - world.rotation.y) * 0.08;
+            world.rotation.x += (targetRotX - world.rotation.x) * 0.08;
+            rings.rotation.y -= dt * 0.02;
+            ring2.rotation.z += dt * 0.01;
+            coreHalo.rotation.z += dt * 0.15;
+            coreHalo2.rotation.z -= dt * 0.10;
+
+            dimNodes.forEach(function (node, i) {
+                node.group.position.y += Math.sin(now * 0.0004 + i * 1.7) * 0.004;
+            });
+
+            targets.forEach(function (t, mat) {
+                mat.opacity += (t - mat.opacity) * 0.1;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        /* ---------- 字体就绪后启动（保证中文宋体贴图） ---------- */
+        function start() {
+            canvas.classList.remove('loading');
+            requestAnimationFrame(animate);
+        }
+        if (document.fonts && document.fonts.load) {
+            Promise.race([
+                Promise.all([
+                    document.fonts.load('900 96px "Noto Serif SC"'),
+                    document.fonts.load('600 56px "Noto Serif SC"'),
+                    document.fonts.load('500 44px "Noto Serif SC"')
+                ]),
+                new Promise(function (r) { setTimeout(r, 2500); })
+            ]).then(start).catch(start);
+        } else {
+            start();
+        }
+    })();
+    </script>
+
+</body>
+
+</html>
